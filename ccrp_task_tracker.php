@@ -10,7 +10,7 @@
  *
  * @link              http://example.com
  * @since             1.0.0
- * @package           stats4sd_api
+ * @package           ccrp_task_tracker
  *
  * @wordpress-plugin
  * Plugin Name:       Stats4SD CCRP Task Tracker
@@ -21,7 +21,7 @@
  * Author URI:        http://stats4sd.org/
  * License:           -
  * License URI:       -
- * Text Domain:       ccrp-tasks
+ * Text Domain:       ccrp_task_tracker
  * Domain Path:       /languages
  */
 
@@ -33,14 +33,13 @@ if ( ! defined( 'WPINC' ) ) {
 
 
 // This plugins adds a set of page templates, and checks for those templates to queue the correct javascript files.
-
-if(is_page('ccrp_tasks')) {
-
-  
-
-  wp_enqueue_script( 'ccrp_tasks-script', plugin_dir_url( __FILE__ ) . '/js/ccrp_tasks.js', array( 'jquery' ), time(), true );
+add_action('wp_enqueue_scripts','init_taskTables');
 
 
+function init_taskTables() {
+
+  wp_register_script( 'ccrp_tasks-script', plugin_dir_url( __FILE__ ) . '/js/ccrp_tasks.js', array( 'jquery','dt-script','dataTables-editor-script' ), time(), true );
+  wp_enqueue_script( 'ccrp_tasks-script');
 
 
   //Setup the parameters for "localising" the javascript. (i.e. passing values into the javascript)
@@ -55,5 +54,4 @@ if(is_page('ccrp_tasks')) {
 
   //localise!
   wp_localize_script('ccrp_tasks-script','vars',$params);
-
-} // end if(is ccrp_tasks page)
+}
