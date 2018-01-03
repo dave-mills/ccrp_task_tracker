@@ -7,13 +7,16 @@ jQuery(document).ready(function($){
   taskEditor = new $.fn.dataTable.Editor({
     ajax: vars.editorurl + "/ccrp_tasks.php",
     table: "#ccrp_tasks_table",
+    template: "#task_editor",
     fields: [
       {
         label: "Activities / Tasks",
+        type: "textarea",
         name: "ccrp_tasks.activities"
       },
       {
         label: "Products (leave blank if none)",
+        type: "textarea",
         labelInfo: "e.g. App templates, sharable resources, tangible products that can be referenced",
         name: "ccrp_tasks.products"
       },
@@ -28,24 +31,60 @@ jQuery(document).ready(function($){
         name: "ccrp_tasks.responsibility"
       },
       {
+        label: "Other Staff",
+        labelInfo: "Other RMS people involved in the task",
+        type: "select",
+        multiple: true,
+        name: "wp_users[].id"
+      },
+      {
+        label: "Program Area(s)",
+        type: "select",
+        multiple: true,
+        name: "ccrp_programarea[].id"
+      },
+    {
+        label: "Theme(s)",
+        type: "select",
+        multiple: true,
+        name: "ccrp_theme[].id"
+      },
+          {
+        label: "Method / Type(s)",
+        type: "select",
+        multiple: true,
+        name: "ccrp_method[].id"
+      },
+      {
         label: "2017 Report",
+        type: "textarea",
         labelInfo: "brief comments from main staff member on activity status - from December RMS meeting",
         name: "ccrp_tasks.2017_report"
       },
       {
         label: "2018 Status",
+        type: "textarea",
         labelInfo: "is task complete, ongoing or stopped for 2018",
         name: "ccrp_tasks.2018_status"
       },
       {
         label: "2018 Comment",
+        type: "textarea",
         labelInfo: "Any comments about this activity going into 2018 - from December RMS meeting",
         name: "ccrp_tasks.2018_comment"
       }
     ]
   });
   
-  
+  taskEditor.on('open displayOrder',function(e,mode,action){
+    console.log("editor init complete");
+    $('#task_editor select')
+      .select2({
+        width: "90%"
+      });
+  })
+  // initialise select2 plugin
+ 
   
   
 

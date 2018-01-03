@@ -38,8 +38,15 @@ add_action('wp_enqueue_scripts','init_taskTables');
 
 function init_taskTables() {
 
+  wp_enqueue_style( 'ccrp_tasks-style',plugin_dir_url( __FILE__ ) . "css/ccrp_tasks.css", time() );
+
   wp_register_script( 'ccrp_tasks-script', plugin_dir_url( __FILE__ ) . '/js/ccrp_tasks.js', array( 'jquery','dt-script','dataTables-editor-script' ), time(), true );
   wp_enqueue_script( 'ccrp_tasks-script');
+
+  //select 2 scripts: 
+  //
+  wp_enqueue_style('select2-style',"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css","4.0.6");
+  wp_enqueue_script('select2-script',"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js",array('jquery'),"4.0.6",true);
 
 
   //Setup the parameters for "localising" the javascript. (i.e. passing values into the javascript)
