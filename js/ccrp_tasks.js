@@ -166,7 +166,7 @@ jQuery(document).ready(function($){
   //Setup task table filters
     yadcf.init(tasksTable, [
           {
-            column_number: 2,
+            column_number: 3,
             filter_container_id: "resp_filter",
             filter_type:"multi_select",
             select_type:"select2",
@@ -178,7 +178,7 @@ jQuery(document).ready(function($){
             filter_reset_button_text: false // hide yadcf reset button
           },
                     {
-            column_number: 4,
+            column_number: 5,
             filter_container_id: "programaea_filter",
             filter_type:"multi_select",
             select_type:"select2",
@@ -190,7 +190,7 @@ jQuery(document).ready(function($){
             filter_reset_button_text: false // hide yadcf reset button
           },
                     {
-            column_number: 5,
+            column_number: 6,
             filter_container_id: "theme_filter",
             filter_type:"multi_select",
             select_type:"select2",
@@ -202,7 +202,7 @@ jQuery(document).ready(function($){
             filter_reset_button_text: false // hide yadcf reset button
           },
                     {
-            column_number: 6,
+            column_number: 7,
             filter_container_id: "method_filter",
             filter_type:"multi_select",
             select_type:"select2",
