@@ -1,9 +1,12 @@
 var taskEditor;
-
+var timeslipEditor;
+var reportEditor;
 
 jQuery(document).ready(function($){
-    console.log("loading ccrp task tracker code");
+  
+  console.log("loading ccrp task tracker code");
 
+  //initialise the task editor
   taskEditor = new $.fn.dataTable.Editor({
     ajax: vars.editorurl + "/ccrp_tasks.php",
     table: "#ccrp_tasks_table",
@@ -60,6 +63,7 @@ jQuery(document).ready(function($){
         type: "textarea",
         labelInfo: "brief comments from main staff member on activity status - from December RMS meeting",
         name: "ccrp_tasks.2017_report"
+
       },
       {
         label: "2018 Status",
@@ -72,10 +76,13 @@ jQuery(document).ready(function($){
         type: "textarea",
         labelInfo: "Any comments about this activity going into 2018 - from December RMS meeting",
         name: "ccrp_tasks.2018_comment"
+
       }
     ]
   });
-  
+
+
+  // initialise select2 plugin
   taskEditor.on('open displayOrder',function(e,mode,action){
     console.log("editor init complete");
     $('#task_editor select')
@@ -83,19 +90,15 @@ jQuery(document).ready(function($){
         width: "90%"
       });
   })
-  // initialise select2 plugin
  
   
   
 
   // Setup datatable columns for main task table:
-  
   taskColumns = [
-    // {data: "id", title: "Show more details", render: function(data, type, row, meta){
-    //   return "<a href='"+data.url+"' target='_blank'>"+data.title+"</a>";
-    //   }, 
-    //   width: "20%" 
-    // },
+    { data: "id", title: "More Info", render: function(data,type,row,meta){
+           return "<span class='fa fa-plus-circle commButton' id='taskInfo_" + data + "'></span>";
+          }, "className":"trPlus"},
     {data: "ccrp_tasks.activities", title: "Activities"},
     {data: "ccrp_tasks.products",title:"Products"},
     {data: "primary_responsibility_name",title:"Responsibility"},
@@ -136,9 +139,9 @@ jQuery(document).ready(function($){
 
       },
     {data: "ccrp_tasks.date",title:"Date"},
-    {data: "ccrp_tasks.2017_report",title:"2017 Report"},
-    {data: "ccrp_tasks.2018_status",title:"2018 Status"},
-    {data: "ccrp_tasks.2018_comment",title:"2018 Comment"},
+    {data: "ccrp_tasks.2017_report",title:"2017 Report", visible: false},
+    {data: "ccrp_tasks.2018_status",title:"2018 Status", visible: false},
+    {data: "ccrp_tasks.2018_comment",title:"2018 Comment", visible: false},
   ];
 
   var tasksTable = $('#ccrp_tasks_table').DataTable({
@@ -160,7 +163,7 @@ jQuery(document).ready(function($){
   });
 
 
-  //Setup filters
+  //Setup task table filters
     yadcf.init(tasksTable, [
           {
             column_number: 2,
@@ -211,6 +214,74 @@ jQuery(document).ready(function($){
             filter_reset_button_text: false // hide yadcf reset button
           }
 
-          ])
-  
+          ]);
+  console.log("current user = ",vars.current_user);
+
+  // timeslipEdtior = new $.fn.dataTable.Editor({
+  //   ajax: vars.editorurl + "/ccrp_timeslips.php",
+  //   // table: "#ccrp_timeslips_table",
+  //   // template: "#timeslips_editor",
+  //   fields: [
+  //     {
+  //       label: "Task"
+  //       name: "ccrp_tasks.activities"
+
+  // })
+
+  //setup child row for task table: 
+  //
+  jQuery('#ccrp_tasks_table tbody').on('click', 'td.trPlus', function () {
+            console.log("clicked");
+            //get the row of the clicked icon
+            var tr = jQuery(this).parents('tr');
+            var row = tasksTable.row( tr );
+            console.log(row);
+
+            //check if child row is already shown.
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                console.log("isShown is true");
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                //if there is a child row, open it.
+                if(row.child() && row.child().length)
+                {
+                    console.log("row exists, showing")
+                    row.child.show();
+                }
+                else {
+                    //else, create the child row then show it.
+                    console.log("row doesn't exist, creating");
+                    taskChildRow(row.data(),row,displayChildRow);
+                }
+                tr.addClass('shown');
+            }
+        } );
+
 });
+
+//function to craete a child row for the task table:
+//
+function taskChildRow(data, row, callback) {
+  console.log("taskChildRow function");
+  console.log(data);
+  $.ajax({
+    url: vars.editorurl + "/taskchild.mst",
+    success: function(d){
+      console.log("got taskchild.html",d);
+      console.log(data['ccrp_tasks']['2017_report']);
+      var rendered = Mustache.render(d,{
+        seven_report: data['ccrp_tasks']['2017_report'],
+        eight_status: data['ccrp_tasks']['2018_status'],
+        eight_comment: data['ccrp_tasks']['2018_comment']
+      });
+      callback(row,rendered);
+
+    }});
+}
+
+function displayChildRow(row,html){
+  row.child(html).show();
+}

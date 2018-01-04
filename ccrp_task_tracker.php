@@ -48,6 +48,10 @@ function init_taskTables() {
   wp_enqueue_style('select2-style',"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css","4.0.6");
   wp_enqueue_script('select2-script',"https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js",array('jquery'),"4.0.6",true);
 
+//add mustache support
+//
+  wp_enqueue_script('mustache-script',plugin_dir_url(__FILE__) . '/js/mustache.js/mustache.min.js',array('jquery'),"4.0.6",true);
+
 
   //Setup the parameters for "localising" the javascript. (i.e. passing values into the javascript)
   $params = array(
@@ -56,7 +60,8 @@ function init_taskTables() {
     //the ajax url for a propoer wordpress ajax call;
     'ajaxurl' => admin_url( 'admin-ajax.php' ),
     // create a 'nonce' to properly authenticate any ajax requests. 
-    'pa_nonce' => wp_create_nonce('pa_nonce')
+    'pa_nonce' => wp_create_nonce('pa_nonce'),
+    'current_user' => wp_get_current_user()->ID
   );
 
   //localise!

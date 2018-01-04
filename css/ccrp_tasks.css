@@ -9,6 +9,10 @@
 .page-template-page-template-ccrp_tasks #main-content .container {
   max-width: 95%!important;
   width: 95%!important;
-  
+
 }
 
+
+.page-template-page-template-ccrp_tasks #main-content .container #left-area {
+  width: 95%!important;
+}

@@ -1,0 +1,43 @@
+<div class='card-deck'>
+  <div class='card border-dark mb-3'>
+    <h4 class='card-header'>Quick Reports / Summaries</h4>
+    <div class='list-group list-group-flush'>
+      <div class='list-group-item'>
+        <div class='row'>
+          <div class='col-sm-3 text-right'><strong>2017 Report:</strong></div>
+          <div class='col-sm-9'>{{seven_report}}</div>
+        </div>
+      </div>
+
+      <div class='list-group-item'>
+        <div class='row'>
+          <div class='col-sm-3 text-right'><strong>2018 Status:</strong></div>
+          <div class='col-sm-9'>{{eight_status}}</div>
+        </div>
+       </div>
+      <div class='list-group-item'>
+        <div class='row'>
+          <div class='col-sm-3 text-right'><strong>2017 Comment:</strong></div>
+          <div class='col-sm-9'>{{eight_comment}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class='card border-dark mb-3'>
+    <h4 class='card-header'>Reports</h4>
+    <div class='list-group list-group-flush'>
+      <div class='list-group-item'>
+        <div class='row'>
+          <div class='col-sm-3 text-right'><strong>List of written report documents goes here:</strong></div>
+          <div class='col-sm-9'>
+        </div>
+      </div>
+      <div class='list-group-item'>
+        <div class='row'>
+          <div class='col-sm-3 text-right'><strong>2018 Status:</strong></div>
+          <div class='col-sm-9'></div>
+        </div>
+       </div>
+    </div>
+  </div>
+</div>
