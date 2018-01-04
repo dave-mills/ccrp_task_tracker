@@ -158,5 +158,59 @@ jQuery(document).ready(function($){
     ],
     pageLength: 50
   });
+
+
+  //Setup filters
+    yadcf.init(tasksTable, [
+          {
+            column_number: 2,
+            filter_container_id: "resp_filter",
+            filter_type:"multi_select",
+            select_type:"select2",
+            select_type_options:{
+                        placeholder: "Select person",
+                        allowClear : true // show 'x' next to selection inseide the select itself
+                        },
+            filter_default_label:"Select Person",
+            filter_reset_button_text: false // hide yadcf reset button
+          },
+                    {
+            column_number: 4,
+            filter_container_id: "programaea_filter",
+            filter_type:"multi_select",
+            select_type:"select2",
+            select_type_options:{
+                        placeholder: "Select Program Area",
+                        allowClear : true // show 'x' next to selection inseide the select itself
+                        },
+            filter_default_label:"Select Program Area",
+            filter_reset_button_text: false // hide yadcf reset button
+          },
+                    {
+            column_number: 5,
+            filter_container_id: "theme_filter",
+            filter_type:"multi_select",
+            select_type:"select2",
+            select_type_options:{
+                        placeholder: "Select Theme",
+                        allowClear : true // show 'x' next to selection inseide the select itself
+                        },
+            filter_default_label:"Select Theme",
+            filter_reset_button_text: false // hide yadcf reset button
+          },
+                    {
+            column_number: 6,
+            filter_container_id: "method_filter",
+            filter_type:"multi_select",
+            select_type:"select2",
+            select_type_options:{
+                        placeholder: "select Theme",
+                        allowClear : true // show 'x' next to selection inseide the select itself
+                        },
+            filter_default_label:"Select Theme",
+            filter_reset_button_text: false // hide yadcf reset button
+          }
+
+          ])
   
 });
