@@ -16,3 +16,23 @@
 .page-template-page-template-ccrp_tasks #main-content .container #left-area {
   width: 95%!important;
 }
+
+#main-content .container::before {
+  width: 0!important;
+}
+
+.table_padding {
+  min-width:1264px!important;
+}
+
+.ccrp_filter {
+  width: 80%;
+}
+
+.ccrp_filter_reset {
+  width: 10%;
+}
+
+#left-area ul.select2-selection__rendered, .entry-content ul.select2-selection__rendered, .comment-content ul.select2-selection__rendered, body.et-pb-preview #main-content .container ul.select2-selection__rendered {
+  padding: 0 0 0 1em!important;
+}

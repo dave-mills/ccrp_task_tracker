@@ -1,43 +1,76 @@
 <div class='card-deck'>
   <div class='card border-dark mb-3'>
     <h4 class='card-header'>Quick Reports / Summaries</h4>
-    <div class='list-group list-group-flush'>
-      <div class='list-group-item'>
-        <div class='row'>
-          <div class='col-sm-3 text-right'><strong>2017 Report:</strong></div>
-          <div class='col-sm-9'>{{seven_report}}</div>
+    <div class='card-body'>
+      <div class='list-group list-group-flush'>
+        <div class='list-group-item'>
+          <div class='row'>
+            <div class='col-sm-4 text-right'><strong>2017 Report:</strong></div>
+            <div class='col-sm-8'>{{seven_report}}</div>
+          </div>
         </div>
-      </div>
 
-      <div class='list-group-item'>
-        <div class='row'>
-          <div class='col-sm-3 text-right'><strong>2018 Status:</strong></div>
-          <div class='col-sm-9'>{{eight_status}}</div>
-        </div>
-       </div>
-      <div class='list-group-item'>
-        <div class='row'>
-          <div class='col-sm-3 text-right'><strong>2017 Comment:</strong></div>
-          <div class='col-sm-9'>{{eight_comment}}</div>
+        <div class='list-group-item'>
+          <div class='row'>
+            <div class='col-sm-4 text-right'><strong>2018 Status:</strong></div>
+            <div class='col-sm-8'>{{eight_status}}</div>
+          </div>
+         </div>
+        <div class='list-group-item'>
+          <div class='row'>
+            <div class='col-sm-4 text-right'><strong>2017 Comment:</strong></div>
+            <div class='col-sm-8'>{{eight_comment}}</div>
+          </div>
         </div>
       </div>
     </div>
+    <div class='card-footer'>
+      <button class='btn btn-default'>Update Quick Summaries</button>
+    </div>
   </div>
-    <div class='card border-dark mb-3'>
+  <div class='card border-dark mb-3'>
     <h4 class='card-header'>Reports</h4>
-    <div class='list-group list-group-flush'>
-      <div class='list-group-item'>
-        <div class='row'>
-          <div class='col-sm-3 text-right'><strong>List of written report documents goes here:</strong></div>
-          <div class='col-sm-9'>
+    <div class='card-body'>
+      <div class='list-group list-group-flush'>
+        <div class='list-group-item'>
+          <div class='row'>
+            <div class='col-sm-4 text-right'><strong>List of written report documents goes here:</strong></div>
+            <div class='col-sm-8'>
+            </div>
+          </div>
+        </div>
+        <div class='list-group-item'>
+          <div class='row'>
+            <div class='col-sm-4 text-right'><strong>2018 Status:</strong></div>
+            <div class='col-sm-8'></div>
+          </div>
         </div>
       </div>
-      <div class='list-group-item'>
-        <div class='row'>
-          <div class='col-sm-3 text-right'><strong>2018 Status:</strong></div>
-          <div class='col-sm-9'></div>
+    </div>
+    <div class='card-footer'>
+      <button class='btn btn-default'>Add new report document</button>
+    </div>
+  </div>
+  <div class='card border-dark mb-3'>
+    <h4 class='card-header'>Timeslips (FreeAgent)</h4>
+    <div class='card-body'>
+      <div class='list-group list-group-flush'>
+        <div class='list-group-item'>
+          <div class='row'>
+            <div class='col-sm-4 text-right'><strong>Number of Timeslips</strong></div>
+            <div class='col-sm-8'>{{number_timeslips}}</div>
+          </div>
         </div>
-       </div>
+        <div class='list-group-item'>
+          <div class='row'>
+            <div class='col-sm-4 text-right'><strong>Total Time allocated:</strong></div>
+            <div class='col-sm-8'>{{total_time}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='card-footer'>
+      <button class='btn btn-default'>Add new Timeslip</button>
     </div>
   </div>
 </div>

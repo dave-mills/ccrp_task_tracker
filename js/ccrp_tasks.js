@@ -31,7 +31,10 @@ jQuery(document).ready(function($){
         label: "Responsibility",
         labelInfo: "Person responsible for task",
         type: "select",
-        name: "ccrp_tasks.responsibility"
+        name: "ccrp_tasks.responsibility",
+        attr:{
+          style: "width:50%"
+        }
       },
       {
         label: "Other Staff",
@@ -82,14 +85,14 @@ jQuery(document).ready(function($){
   });
 
 
-  // initialise select2 plugin
-  taskEditor.on('open displayOrder',function(e,mode,action){
-    console.log("editor init complete");
-    $('#task_editor select')
-      .select2({
-        width: "90%"
-      });
-  })
+  // // initialise select2 plugin
+  // taskEditor.on('open displayOrder',function(e,mode,action){
+  //   console.log("editor init complete");
+  //   $('#task_editor select')
+  //     .select2({
+  //       width: "resolve"
+  //     });
+  // })
  
   
   
@@ -99,42 +102,30 @@ jQuery(document).ready(function($){
     { data: "id", title: "More Info", render: function(data,type,row,meta){
            return "<span class='fa fa-plus-circle commButton' id='taskInfo_" + data + "'></span>";
           }, "className":"trPlus"},
-    {data: "ccrp_tasks.activities", title: "Activities"},
-    {data: "ccrp_tasks.products",title:"Products"},
+
+    {data: "ccrp_tasks.activities", title: "Activities", width: "20%"},
+    {data: "ccrp_tasks.products",title:"Products", width: "20%"},
     {data: "primary_responsibility_name",title:"Responsibility"},
     {data: "wp_users", title:"Also involved", render: function(data,type,row,meta){
-        string = "";
-        for(var i=0;i<data.length; i++){
-          string += "<span class='badge badge-info'>" + data[i].secondary_responsibility_name + "</span>  ";
-                      }
-        return string;
-        }
+        return renderMultiCells(data,"secondary_responsibility_name");
+        }// end function
+          
+
+        
 
       },
     {data: "ccrp_programarea", title:"Program Area(s)", render: function(data,type,row,meta){
-        string = "";
-        for(var i=0;i<data.length; i++){
-          string += "<span class='badge badge-info'>" + data[i].programarea + "</span>  ";
-                      }
-        return string;
-        }
+          return renderMultiCells(data,"programarea");
+        }// end function
 
       },
     {data: "ccrp_theme", title:"Theme(s)", render: function(data,type,row,meta){
-        string = "";
-        for(var i=0;i<data.length; i++){
-          string += "<span class='badge badge-info'>" + data[i].theme + "</span>  ";
-                      }
-        return string;
+        return renderMultiCells(data,"theme");
         }
 
       },
       {data: "ccrp_method", title:"Method / Activity Type(s)", render: function(data,type,row,meta){
-        string = "";
-        for(var i=0;i<data.length; i++){
-          string += "<span class='badge badge-info'>" + data[i].method_type + "</span>  ";
-                      }
-        return string;
+        return renderMultiCells(data,"method_type");
         }
 
       },
@@ -159,9 +150,12 @@ jQuery(document).ready(function($){
       editor: taskEditor
     }
     ],
-    pageLength: 50
+    pageLength: 150
   });
 
+tasksTable.on('init.dt',function(){
+  console.log("full data", tasksTable.data());
+})
 
   //Setup task table filters
     yadcf.init(tasksTable, [
@@ -170,51 +164,52 @@ jQuery(document).ready(function($){
             filter_container_id: "resp_filter",
             filter_type:"multi_select",
             select_type:"select2",
-            select_type_options:{
-                        placeholder: "Select person",
-                        allowClear : true // show 'x' next to selection inseide the select itself
-                        },
+            // html_data_type:"text",
+            style_class:"ccrp_filter",
+            reset_button_style_class:"ccrp_filter_reset",
             filter_default_label:"Select Person",
-            filter_reset_button_text: false // hide yadcf reset button
+            filter_reset_button_text: "Reset" // hide yadcf reset button
           },
                     {
             column_number: 5,
             filter_container_id: "programaea_filter",
             filter_type:"multi_select",
             select_type:"select2",
+            // column_data_type:"html",
+            // html_data_type:"text",
             select_type_options:{
-                        placeholder: "Select Program Area",
-                        allowClear : true // show 'x' next to selection inseide the select itself
+                        placeholder: "Select Program Area(s)",
+                        // allowClear : true // show 'x' next to selection inseide the select itself
+                        // width:"90%"
                         },
             filter_default_label:"Select Program Area",
-            filter_reset_button_text: false // hide yadcf reset button
+            filter_reset_button_text: "Reset" // hide yadcf reset button
           },
                     {
             column_number: 6,
             filter_container_id: "theme_filter",
             filter_type:"multi_select",
             select_type:"select2",
-            select_type_options:{
-                        placeholder: "Select Theme",
-                        allowClear : true // show 'x' next to selection inseide the select itself
-                        },
+            // column_data_type:"html",
+            // html_data_type:"text",
             filter_default_label:"Select Theme",
-            filter_reset_button_text: false // hide yadcf reset button
+            filter_reset_button_text: "Reset" // hide yadcf reset button
           },
                     {
             column_number: 7,
             filter_container_id: "method_filter",
             filter_type:"multi_select",
             select_type:"select2",
-            select_type_options:{
-                        placeholder: "select Theme",
-                        allowClear : true // show 'x' next to selection inseide the select itself
-                        },
+            // column_data_type:"html",
+            // html_data_type:"text",
             filter_default_label:"Select Theme",
-            filter_reset_button_text: false // hide yadcf reset button
+            filter_reset_button_text: "Reset" // hide yadcf reset button
+          },
+          ],
+          {
+            // cumulative_filtering: true
           }
-
-          ]);
+    );
   console.log("current user = ",vars.current_user);
 
   // timeslipEdtior = new $.fn.dataTable.Editor({
@@ -267,7 +262,7 @@ jQuery(document).ready(function($){
 function taskChildRow(data, row, callback) {
   console.log("taskChildRow function");
   console.log(data);
-  $.ajax({
+  jQuery.ajax({
     url: vars.editorurl + "/taskchild.mst",
     success: function(d){
       console.log("got taskchild.html",d);
@@ -284,4 +279,28 @@ function taskChildRow(data, row, callback) {
 
 function displayChildRow(row,html){
   row.child(html).show();
+}
+
+
+function renderMultiCells(data,variableName){
+        string = "";
+        for(var i=0;i<data.length; i++){
+          if(data[i][variableName].search("/") == -1) {
+            string += "<span class='badge badge-info'>" + data[i][variableName] + "</span>";
+          } //endif
+          else {
+            partstring = data[i][variableName].split("/");
+            string += "<span class='badge badge-info'>";
+            for(var j=0;j<partstring.length;j++){
+              if(j!=0){
+                string+="/<br/>";
+              }
+              string+= partstring[j];
+            }
+            string+= "</span>";
+            
+            } //endelse
+           
+          } //endfor
+          return string;
 }
