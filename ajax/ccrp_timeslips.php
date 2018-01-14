@@ -5,7 +5,9 @@
  */
 
 // DataTables PHP library
-include( "/Users/davidmills/Sites/stats4sd.org/wp-content/plugins/wordpress_datatables/datatables_editor/php/DataTables.php");
+$config = parse_ini_file('/opt/datatables_conini.php');
+
+include( $config['webroot'] . "/wp-content/plugins/wordpress_datatables/datatables_editor/php/DataTables.php");
 
 // Alias Editor classes so they are easy to use
 use
