@@ -106,5 +106,29 @@ Editor::inst( $db, 'ccrp_tasks' )
         Field::inst( 'display_name','secondary_responsibility_name' )
       )
     )
+  //also get timesheets for the tasks through the same request
+  ->join(
+    Mjoin::inst('ccrp_timeslips')
+    ->link('ccrp_tasks.id','ccrp_timeslips.task_id')
+    ->fields(
+      Field::inst('id')
+      ->options(Options::inst()
+                ->table('ccrp_timeslips')
+                ->value('id')
+                ->label('comment')
+              ),
+      Field::inst('staff_id'),
+      Field::inst('comment'),
+      Field::inst('hours'),
+      Field::inst('date')
+    )
+  )
+  ->join(
+    Mjoin::inst('ccrp_reports')
+    ->link('ccrp_tasks.id','ccrp_reports.task_id')
+    ->fields(
+      Field::inst('id')
+    )
+  )
   ->process( $_POST )
   ->json();

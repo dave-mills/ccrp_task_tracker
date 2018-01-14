@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class='card-footer'>
-      <button class='btn btn-default'>Update Quick Summaries</button>
+      <button class='btn btn-primary edit_row'>Edit Task (including quick summaries)</button>
     </div>
   </div>
   <div class='card border-dark mb-3'>
@@ -34,21 +34,15 @@
       <div class='list-group list-group-flush'>
         <div class='list-group-item'>
           <div class='row'>
-            <div class='col-sm-4 text-right'><strong>List of written report documents goes here:</strong></div>
-            <div class='col-sm-8'>
-            </div>
-          </div>
-        </div>
-        <div class='list-group-item'>
-          <div class='row'>
-            <div class='col-sm-4 text-right'><strong>2018 Status:</strong></div>
-            <div class='col-sm-8'></div>
+            <div class='col-sm-4 text-right'><strong>Number of reports:</strong></div>
+            <div class='col-sm-8'>{{number_reports}}</div>
           </div>
         </div>
       </div>
     </div>
     <div class='card-footer'>
-      <button class='btn btn-default'>Add new report document</button>
+      <button class='btn btn-default view_reports'>View reports</button>
+      <button class='btn btn-default add_report'>Add new report document</button>
     </div>
   </div>
   <div class='card border-dark mb-3'>
@@ -64,13 +58,17 @@
         <div class='list-group-item'>
           <div class='row'>
             <div class='col-sm-4 text-right'><strong>Total Time allocated:</strong></div>
-            <div class='col-sm-8'>{{total_time}}</div>
+            <div class='col-sm-8'>{{total_time}} days</div>
           </div>
         </div>
       </div>
     </div>
     <div class='card-footer'>
-      <button class='btn btn-default'>Add new Timeslip</button>
+      <button class='btn btn-default view_timeslips'>View / Edit Timeslips</button>
+      <button class='btn btn-default add_timeslip'>Add new Timeslip</button>
     </div>
   </div>
 </div>
+
+
+

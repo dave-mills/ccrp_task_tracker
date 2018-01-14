@@ -22,7 +22,7 @@
 }
 
 .table_padding {
-  min-width:1264px!important;
+  min-width:1300px!important;
 }
 
 .ccrp_filter {
@@ -36,3 +36,12 @@
 #left-area ul.select2-selection__rendered, .entry-content ul.select2-selection__rendered, .comment-content ul.select2-selection__rendered, body.et-pb-preview #main-content .container ul.select2-selection__rendered {
   padding: 0 0 0 1em!important;
 }
+
+.yadcf-filter-wrapper {
+  width: 90%;
+}
+
+#wpadminbar ul li, #wpadminbar ul, #wp-admin-bar-root-default {
+  z-index: 500!important;
+}
+
