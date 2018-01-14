@@ -6,7 +6,7 @@
 
 // DataTables PHP library
 $config = parse_ini_file('/opt/datatables_conini.php');
-include( $config['webroot'] . "/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/config.php");
+include( $config['webroot'] . "/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
 
 // Alias Editor classes so they are easy to use
 use
