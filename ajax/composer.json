@@ -1,0 +1,14 @@
+{
+    "name": "root/stats4sd-api",
+    "description": "A small Wordpress plugin to interact with various APIs",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+       
+    },
+    "authors": [
+        {
+            "name": "Dave Mills",
+            "email": "support@stats4sd.org"
+        }
+    ]
+}

@@ -1,0 +1,6 @@
+.DS_Store
+ajax/.DS_Store
+ajax/composer.lock
+ajax/vendor/*
+
+

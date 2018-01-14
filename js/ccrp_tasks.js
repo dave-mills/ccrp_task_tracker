@@ -223,10 +223,18 @@ jQuery(document).ready(function($){
 
 
   jQuery('#add_timeslip_main').click(function(){
-    timeslipEditor.buttons("create").create();
+    timeslipEditor
+      .buttons("create")
+      .create()
+      .set( 'ccrp_reports.staff_id', vars.current_user );
+;
   });
     jQuery('#add_report_main').click(function(){
-    reportEditor.buttons("create").create();
+    reportEditor
+      .buttons("create")
+      .create()
+      .set( 'ccrp_reports.staff_id', vars.current_user );
+;
   });
 
   // Setup datatable columns for main task table:
