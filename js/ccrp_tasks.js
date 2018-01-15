@@ -226,7 +226,7 @@ jQuery(document).ready(function($){
     timeslipEditor
       .buttons("create")
       .create()
-      .set( 'ccrp_reports.staff_id', vars.current_user );
+      .set( 'ccrp_timeslips.staff_id', vars.current_user );
 ;
   });
     jQuery('#add_report_main').click(function(){
