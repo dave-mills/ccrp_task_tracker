@@ -73,7 +73,7 @@ jQuery(document).ready(function($){
       name: "ccrp_reports.file_id",
       type: "upload",
       display: function ( id ) {
-          return '<a href="'+table.file( 'ccrp_reports', id ).fileUrl+'">'+table.file('ccrp_reports',id).fileName+'</a>';
+          return '<a href="'+reportsTable.file( 'ccrp_reports', id ).fileUrl+'">'+reportsTable.file('ccrp_reports',id).fileName+'</a>';
       }
   },
       {
@@ -81,7 +81,7 @@ jQuery(document).ready(function($){
       name: "ccrp_reports.dropbox_url",
       type: "text",
       display: function ( id ) {
-          return '<a href="'+table.file( 'ccrp_reports', id ).fileUrl+'">'+table.file('ccrp_reports',id).fileName+'</a>';
+          return '<a href="'+reportsTable.file( 'ccrp_reports', id ).fileUrl+'">'+reportsTable.file('ccrp_reports',id).fileName+'</a>';
       }
   },
     {
