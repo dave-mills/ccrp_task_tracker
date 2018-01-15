@@ -288,6 +288,10 @@ jQuery(document).ready(function($){
     {
       extend: "edit",
       editor: taskEditor
+    },
+        {
+      extend: "create",
+      editor: taskEditor
     }
     ],
     pageLength: 150
