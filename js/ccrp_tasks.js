@@ -389,6 +389,7 @@ jQuery(document).ready(function($){
                 row.child.hide();
                 rowShown = -1;
                 console.log(rowShown);
+                
             }
             else {
 

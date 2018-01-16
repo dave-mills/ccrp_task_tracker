@@ -45,3 +45,6 @@
   z-index: 500!important;
 }
 
+#left-area ul, .entry-content ul, .comment-content ul, body.et-pb-preview #main-content .container ul {
+  list-style-type: none!important;
+}
