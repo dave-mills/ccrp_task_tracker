@@ -43,6 +43,12 @@ jQuery(document).ready(function($){
       name:"ccrp_timeslips.hours"
     },
     {
+      label:"Date",
+      type:"date",
+      labelInfo: "enter date of the work done",
+      name:"ccrp_timeslips.date"
+    },
+    {
       label:"Staff",
       type:"select",
       labelInfo: "Who did this? (will eventually default to logged-in user",
