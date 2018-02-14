@@ -23,6 +23,8 @@
     )
   ]);
 
+  if($action == "get_task");
+
 
   //if action is "test"
 
@@ -43,7 +45,13 @@
 
     $user = $_POST['user']; 
     $project = "https://api.freeagent.com/v2/projects/1275080";
-    $task = "https://api.freeagent.com/v2/tasks/1997008";
+
+    if($_POST['chargeable']=="1") {
+      $task = "https://api.freeagent.com/v2/tasks/1997008";
+    } else {
+      $task = "https://api.freeagent.com/v2/tasks/2039466";
+    }
+
     $dated_on = $_POST['date'];
     $hours = $_POST['hours'];
     $comment = $_POST['comment'];
@@ -95,9 +103,16 @@
   if($action == "edit_timeslip") {
 
     $timeslip_url = $_POST['url'];
-    $user = $_POST['user']; 
+    $user = $_POST['user'];
     $project = "https://api.freeagent.com/v2/projects/1275080";
-    $task = "https://api.freeagent.com/v2/tasks/1997008";
+
+    // Chceck "chargeable" to see which task to add it to.
+    if($_POST['chargeable']=="1") {
+      $task = "https://api.freeagent.com/v2/tasks/1997008";
+    } else {
+      $task = "https://api.freeagent.com/v2/tasks/2039466";
+    }
+
     $dated_on = $_POST['date'];
     $hours = $_POST['hours'];
     $comment = $_POST['comment'];

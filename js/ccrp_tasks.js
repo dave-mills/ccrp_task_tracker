@@ -61,6 +61,20 @@ jQuery(document).ready(function($){
     {
       type:"hidden",
       name:"ccrp_timeslips.url"
+    },
+    {
+      label:"Chargeable?",
+      labelInfo:"Should this time be charged to the project? (Default is yes)",
+      type:"radio",
+      options:[{
+        label:"  Yes",
+        value:"1"
+      },
+      {
+        label:"  No",
+        value:"0"
+      }],
+      name:"ccrp_timeslips.chargeable"
     }
     ]
   });
@@ -227,6 +241,7 @@ jQuery(document).ready(function($){
       var date = timeslipEditor.field('ccrp_timeslips.date').val();
       var hours = timeslipEditor.field('ccrp_timeslips.hours').val();
       var comment = timeslipEditor.field('ccrp_timeslips.comment').val();
+      var chargeable = timeslipEditor.field('ccrp_timeslips.chargeable').val();
 
       // timeslip = editor_data.data[0]['ccrp_timeslips'];
       // console.log("timeslip",timeslip);
@@ -255,7 +270,8 @@ jQuery(document).ready(function($){
             "user": url,
             "date": date,
             "hours": hours,
-            "comment": comment
+            "comment": comment,
+            "chargeable":chargeable
           }
 
           jQuery.ajax({
@@ -298,6 +314,8 @@ jQuery(document).ready(function($){
       var hours = timeslipEditor.field('ccrp_timeslips.hours').val();
       var comment = timeslipEditor.field('ccrp_timeslips.comment').val();
       var timeslip_url = timeslipEditor.field('ccrp_timeslips.url').val();
+      var chargeable = timeslipEditor.field('ccrp_timeslips.chargeable').val();
+
 
       if(timeslip_url == "" || timeslip_url == null) {
       var post_action = "add_timeslip";
@@ -334,7 +352,9 @@ jQuery(document).ready(function($){
             "user": url,
             "date": date,
             "hours": hours,
-            "comment": comment
+            "comment": comment,
+            "chargeable":chargeable
+
           }
 
           jQuery.ajax({
@@ -825,6 +845,7 @@ function timeslipTable() {
       {data: "ccrp_timeslips.hours", title: "Hours"},
       {data: "ccrp_timeslips.comment", title: "Comment"},
       {data: "ccrp_timeslips.url",title:"FreeAgent URL",visible:false},
+      {data: "ccrp_timeslips.chargeable",title:"Chargeable?",visible:true},
       {data: null, className:"center",defaultContent:"<a href='' class='editor_edit'>Edit</a>"}
       ];
 
@@ -845,10 +866,10 @@ function timeslipTable() {
         pageLength: 150
       });
 
-      $('#timeslips_table').on('click','a.editor_edit',function(e){
+      jQuery('#timeslips_table').on('click','a.editor_edit',function(e){
         e.preventDefault();
 
-        timeslipEditor.edit($(this).closest('tr'),{
+        timeslipEditor.edit(jQuery(this).closest('tr'),{
           title: 'Edit Timeslip',
           buttons: "Update"
         })

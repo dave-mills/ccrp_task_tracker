@@ -9,7 +9,7 @@ require_once 'vendor/autoload.php';
 use GuzzleHttp\Client;
 
 //get access token
-$config = parse_ini_file("/var/opt/freeagent_conini.php");
+$config = parse_ini_file("/opt/freeagent_conini.php");
 $access_token = $config['access'];
 
 //initialise client
