@@ -852,7 +852,7 @@ function timeslipTable() {
           title: 'Edit Timeslip',
           buttons: "Update"
         })
-      }
+      })
 
       secondaryInit = 1;
 }
