@@ -1,4 +1,4 @@
-
+ 
 <?php
 
 // before doing anything, ask the question - is this called from the command line with the correct parameter?

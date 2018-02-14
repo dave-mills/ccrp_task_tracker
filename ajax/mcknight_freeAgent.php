@@ -48,15 +48,51 @@
     $task = "https://api.freeagent.com/v2/tasks/1997008";
     $dated_on = $_POST['date'];
     $hours = $_POST['hours'];
+    $comment = $_POST['comment'];
 
     $timeslip = [
-      "project" => $project,
-      "task" => $task,
-      "dated_on" => $dated_on,
-      "hours" => $hours,
-      "user" => $user
+      "timeslip" => [
+        "project" => $project,
+        "task" => $task,
+        "dated_on" => $dated_on,
+        "hours" => $hours,
+        "user" => $user,
+        "comment" => $comment
+      ]
+
     ];
+
+    try {
+      $response = $client->request(
+        "POST",
+        "https://api.freeagent.com/v2/timeslips",
+        ['form_params'=>$timeslip]
+      );
+
+      $body = $response->getBody();
+      echo $body;
+      die();
+     } catch (RequestException $e) {
+      echo Psr7\str($e->getRequest());
+      if($e->hasResponse()){
+        echo Psr7\str($e->getResponse());
+      }
+      die();
+    } // end catch
+
+    // echo var_dump($response);
+    // die();
     }
+
+  if($action == "get_timeslip") {
+    $response = $client->request(
+      "GET",
+      "https://api.freeagent.com/v2/timeslips/21245283"
+    );
+    $body = $response->getBody();
+    echo $body;
+    die();
+  }
 
 // $r = $client->request('POST', 'http://httpbin.org/post', ['body' => $timeslip]);
 

@@ -32,9 +32,9 @@ $contactResponse = $client->request("GET", "contacts?per_page=100&view=active");
 
 $contacts = json_decode($contactResponse->getBody(true));
 
-// tasks
+//tasks
 $taskResponse = $client->request("GET","tasks?page=1&per_page=100");
-$tasks = array(); 
+$tasks = array();
 
 $tasks[] = json_decode($taskResponse->getBody(true));
 

@@ -14,6 +14,38 @@ var rowShown = -1;
 jQuery(document).ready(function($){
   
   console.log("loading ccrp task tracker code");
+  console.log("test");
+
+  // //USer table is only initiated as a quick way to get the user id / urls from the database. 
+  // userTable = $('#userTable').DataTable({
+  //   ajax: vars.editorurl + "/users.php",
+  //   columns: [
+  //   {data:'id'},
+  //     {data:'url'},
+  //     {data:'name'}
+  //   ],
+  // });
+
+  // userEditor = new $.fn.dataTable.Editor({
+  //   ajax: vars.editorurl + "/users.php",
+  //   fields: [
+  //   {
+  //     label: "User ID",
+  //     type: "readonly",
+  //     name:"id"
+  //   },
+  //   {
+  //     label:"url",
+  //     labelInfo:"only the unique part. do not include the https://api.freeagent.com/v2/users component",
+  //     name:"url",
+  //   },
+  //   {
+  //     label:"name",
+  //     type:"readonly",
+  //     name:"name"
+  //   }
+  //   ]
+  // })
 
   //setup timeslip editor: 
   timeslipEditor = new $.fn.dataTable.Editor({
@@ -56,6 +88,10 @@ jQuery(document).ready(function($){
         attr:{
           style: "width:50%"
         }
+    },
+    {
+      type:"hidden",
+      name:"ccrp_timeslips.url"
     }
     ]
   });
@@ -71,8 +107,8 @@ jQuery(document).ready(function($){
       labelInfo: "select the task for this report",
       name:"ccrp_reports.task_id",
       attr:{
-          style: "width:50%"
-        }
+        style: "width:50%"
+      }
     },
     {
       label: "File Upload:",
@@ -81,15 +117,15 @@ jQuery(document).ready(function($){
       display: function ( id ) {
           return '<a href="'+reportEditor.file( 'ccrp_reports_files', id ).fileUrl+'">'+reportEditor.file('ccrp_reports_files',id).fileName+'</a>';
       }
-  },
-      {
+    },
+    {
       label: "Dropbox Url:",
       name: "ccrp_reports.dropbox_url",
       type: "text",
       display: function ( id ) {
           return '<a href="'+reportEditor.file( 'ccrp_reports_files', id ).fileUrl+'">'+reportEditor.file('ccrp_reports_files',id).fileName+'</a>';
       }
-  },
+    },
     {
       label:"Author",
       type:"select",
@@ -97,7 +133,7 @@ jQuery(document).ready(function($){
       name:"ccrp_reports.staff_id",
         attr:{
           style: "width:50%"
-        }
+      }
     }
     ]
   });
@@ -206,6 +242,76 @@ jQuery(document).ready(function($){
         width: "80%"
       });
   });
+
+
+  //add hook to send new timeslips directly to FreeAgent: 
+  //
+  timeslipEditor.on('preSubmit',function(e,data,action){
+    var freeagent_url = this.field('ccrp_timeslips.url');
+    console.log('event',e);
+    console.log('data',data);
+    console.log('action',action);
+
+    timeslip = data.data[0]['ccrp_timeslips'];
+    console.log("timeslip",timeslip);
+
+    //submit a request to the users.php script.
+    //POST the user_id, will return the whole row.
+  jQuery.ajax({
+    url: vars.editorurl + "/users.php",
+    method: "POST",
+    data: {
+      "user_id": timeslip.staff_id
+    },
+    success: function(d){
+      
+      console.log("d",d);
+      d = JSON.parse(d);
+      url = d.data[0]['url'];
+      console.log("url",url);
+      //construct the full url for the FreeAgent User. 
+      url = "https://api.freeagent.com/v2/users/" + url;
+
+      //setup the object to POST to the FreeAgent API.
+      post_data = {
+        "action":"add_timeslip",
+        "user": url,
+        "date": timeslip.date,
+        "hours": timeslip.hours,
+        "comment": timeslip.comment
+      }
+
+      jQuery.ajax({
+        url: vars.editorurl + "/mcknight_freeAgent.php",
+        method: "POST",
+        data: post_data,
+        success: function(d){
+          console.log("succeeded at the post. Winning");
+          console.log("response = ",d);
+          d =JSON.parse(d);
+          freeagent_url = d.timeslip.url;
+
+          
+        },
+        error: function(d){
+          console.log("ajax error sending data to FreeAgent");
+          return false;
+        }
+      }) //end ajax to FreeAgent
+
+
+    },
+    error: function(d){
+      console.log("ajax error retrieving data from users.php");
+      return false;
+    }
+
+  }); //end ajax to users.php
+    
+  
+  }) //end preSubmit
+
+
    //setup hidden datatables:
   timeslipTable();
   reportsTable();
