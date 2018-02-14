@@ -292,11 +292,23 @@ jQuery(document).ready(function($){
   if(action == "edit"){
     console.log(timeslipEditor.field('ccrp_timeslips.url').val());
 
+
       var staff_id = timeslipEditor.field('ccrp_timeslips.staff_id').val();
       var date = timeslipEditor.field('ccrp_timeslips.date').val();
       var hours = timeslipEditor.field('ccrp_timeslips.hours').val();
       var comment = timeslipEditor.field('ccrp_timeslips.comment').val();
       var timeslip_url = timeslipEditor.field('ccrp_timeslips.url').val();
+
+      if(timeslip_url == "") {
+      var post_action = "add_timeslip";
+      console.log("should add not edit");
+      
+      } else {
+        var post_action = "edit_timeslip";
+        console.log("should edit not add");
+
+      }
+
       //submit a request to the users.php script.
       //POST the user_id, will return the whole row.
       jQuery.ajax({
@@ -317,7 +329,7 @@ jQuery(document).ready(function($){
 
           //setup the object to POST to the FreeAgent API.
           post_data = {
-            "action":"edit_timeslip",
+            "action": post_action,
             "url": timeslip_url,
             "user": url,
             "date": date,
@@ -333,6 +345,14 @@ jQuery(document).ready(function($){
             success: function(d){
               console.log("succeeded at the edit post. Winning");
               console.log("response = ",d);
+
+              if(post_action == "add_timeslip"){
+                d =JSON.parse(d);
+                freeagent_url = d.timeslip.url;
+                timeslipEditor.field('ccrp_timeslips.url').val(freeagent_url);
+
+                console.log("freeagent_url",freeagent_url)
+              }
             },
             error: function(d){
               console.log("ajax error sending data to FreeAgent");
