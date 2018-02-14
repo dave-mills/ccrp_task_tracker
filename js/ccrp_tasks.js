@@ -824,8 +824,8 @@ function timeslipTable() {
       {data: "ccrp_timeslips.date", title: "Date"},
       {data: "ccrp_timeslips.hours", title: "Hours"},
       {data: "ccrp_timeslips.comment", title: "Comment"},
-      {data: "ccrp_timeslips.url",title:"FreeAgent URL",visible:false}
-
+      {data: "ccrp_timeslips.url",title:"FreeAgent URL",visible:false},
+      {data: null, className:"center",defaultContent:"<a href='' class='editor_edit'>Edit</a>"}
       ];
 
       timeslipsTable = jQuery('#timeslips_table').DataTable({
@@ -844,6 +844,15 @@ function timeslipTable() {
         ],
         pageLength: 150
       });
+
+      $('#timeslips_table').on('click','a.editor_edit',function(e){
+        e.preventDefault();
+
+        timeslipEditor.edit($(this).closest('tr'),{
+          title: 'Edit Timeslip',
+          buttons: "Update"
+        })
+      }
 
       secondaryInit = 1;
 }
