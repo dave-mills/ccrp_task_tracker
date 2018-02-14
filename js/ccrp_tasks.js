@@ -16,37 +16,6 @@ jQuery(document).ready(function($){
   console.log("loading ccrp task tracker code");
   console.log("test");
 
-  // //USer table is only initiated as a quick way to get the user id / urls from the database. 
-  // userTable = $('#userTable').DataTable({
-  //   ajax: vars.editorurl + "/users.php",
-  //   columns: [
-  //   {data:'id'},
-  //     {data:'url'},
-  //     {data:'name'}
-  //   ],
-  // });
-
-  // userEditor = new $.fn.dataTable.Editor({
-  //   ajax: vars.editorurl + "/users.php",
-  //   fields: [
-  //   {
-  //     label: "User ID",
-  //     type: "readonly",
-  //     name:"id"
-  //   },
-  //   {
-  //     label:"url",
-  //     labelInfo:"only the unique part. do not include the https://api.freeagent.com/v2/users component",
-  //     name:"url",
-  //   },
-  //   {
-  //     label:"name",
-  //     type:"readonly",
-  //     name:"name"
-  //   }
-  //   ]
-  // })
-
   //setup timeslip editor: 
   timeslipEditor = new $.fn.dataTable.Editor({
     template: "#timeslip_editor",
@@ -246,70 +215,196 @@ jQuery(document).ready(function($){
 
   //add hook to send new timeslips directly to FreeAgent: 
   //
-  timeslipEditor.on('preSubmit',function(e,data,action){
-    var freeagent_url = this.field('ccrp_timeslips.url');
-    console.log('event',e);
-    console.log('data',data);
-    console.log('action',action);
+  timeslipEditor.on('initSubmit',function(e,action){
 
-    timeslip = data.data[0]['ccrp_timeslips'];
-    console.log("timeslip",timeslip);
+    //When creating a new timeslip:
+    if(action == "create") {
+      console.log('event',e);
+      // console.log('data',editor_data);
+      console.log('action',action);
 
-    //submit a request to the users.php script.
-    //POST the user_id, will return the whole row.
-  jQuery.ajax({
-    url: vars.editorurl + "/users.php",
-    method: "POST",
-    data: {
-      "user_id": timeslip.staff_id
-    },
-    success: function(d){
-      
-      console.log("d",d);
-      d = JSON.parse(d);
-      url = d.data[0]['url'];
-      console.log("url",url);
-      //construct the full url for the FreeAgent User. 
-      url = "https://api.freeagent.com/v2/users/" + url;
+      var staff_id = timeslipEditor.field('ccrp_timeslips.staff_id').val();
+      var date = timeslipEditor.field('ccrp_timeslips.date').val();
+      var hours = timeslipEditor.field('ccrp_timeslips.hours').val();
+      var comment = timeslipEditor.field('ccrp_timeslips.comment').val();
 
-      //setup the object to POST to the FreeAgent API.
-      post_data = {
-        "action":"add_timeslip",
-        "user": url,
-        "date": timeslip.date,
-        "hours": timeslip.hours,
-        "comment": timeslip.comment
-      }
+      // timeslip = editor_data.data[0]['ccrp_timeslips'];
+      // console.log("timeslip",timeslip);
 
+      //submit a request to the users.php script.
+      //POST the user_id, will return the whole row.
       jQuery.ajax({
-        url: vars.editorurl + "/mcknight_freeAgent.php",
+        async: false,
+        url: vars.editorurl + "/users.php",
         method: "POST",
-        data: post_data,
+        data: {
+          "user_id": staff_id
+        },
         success: function(d){
-          console.log("succeeded at the post. Winning");
-          console.log("response = ",d);
-          d =JSON.parse(d);
-          freeagent_url = d.timeslip.url;
-
           
+          console.log("d",d);
+          d = JSON.parse(d);
+          url = d.data[0]['url'];
+          console.log("url",url);
+          //construct the full url for the FreeAgent User. 
+          url = "https://api.freeagent.com/v2/users/" + url;
+
+          //setup the object to POST to the FreeAgent API.
+          post_data = {
+            "action":"add_timeslip",
+            "user": url,
+            "date": date,
+            "hours": hours,
+            "comment": comment
+          }
+
+          jQuery.ajax({
+            async: false,
+            url: vars.editorurl + "/mcknight_freeAgent.php",
+            method: "POST",
+            data: post_data,
+            success: function(d){
+              console.log("succeeded at the post. Winning");
+              console.log("response = ",d);
+              d =JSON.parse(d);
+              freeagent_url = d.timeslip.url;
+              //editor_data.data[0].ccrp_timeslips.url = freeagent_url;
+              
+              timeslipEditor.field('ccrp_timeslips.url').val(freeagent_url);
+
+              console.log("freeagent_url",freeagent_url)
+              
+            },
+            error: function(d){
+              console.log("ajax error sending data to FreeAgent");
+              return false;
+            }
+          }) //end ajax to FreeAgent
         },
         error: function(d){
-          console.log("ajax error sending data to FreeAgent");
+          console.log("ajax error retrieving data from users.php");
           return false;
         }
-      }) //end ajax to FreeAgent
+      }); //end ajax to users.php
+   } // end CREATE function
 
 
-    },
-    error: function(d){
-      console.log("ajax error retrieving data from users.php");
-      return false;
-    }
+  if(action == "edit"){
+    console.log(timeslipEditor.field('ccrp_timeslips.url').val());
 
-  }); //end ajax to users.php
+      var staff_id = timeslipEditor.field('ccrp_timeslips.staff_id').val();
+      var date = timeslipEditor.field('ccrp_timeslips.date').val();
+      var hours = timeslipEditor.field('ccrp_timeslips.hours').val();
+      var comment = timeslipEditor.field('ccrp_timeslips.comment').val();
+      var timeslip_url = timeslipEditor.field('ccrp_timeslips.url').val();
+      //submit a request to the users.php script.
+      //POST the user_id, will return the whole row.
+      jQuery.ajax({
+        async: false,
+        url: vars.editorurl + "/users.php",
+        method: "POST",
+        data: {
+          "user_id": staff_id
+        },
+        success: function(d){
+          
+          console.log("d",d);
+          d = JSON.parse(d);
+          url = d.data[0]['url'];
+          console.log("url",url);
+          //construct the full url for the FreeAgent User. 
+          url = "https://api.freeagent.com/v2/users/" + url;
+
+          //setup the object to POST to the FreeAgent API.
+          post_data = {
+            "action":"edit_timeslip",
+            "url": timeslip_url,
+            "user": url,
+            "date": date,
+            "hours": hours,
+            "comment": comment
+          }
+
+          jQuery.ajax({
+            async: false,
+            url: vars.editorurl + "/mcknight_freeAgent.php",
+            method: "POST",
+            data: post_data,
+            success: function(d){
+              console.log("succeeded at the edit post. Winning");
+              console.log("response = ",d);
+            },
+            error: function(d){
+              console.log("ajax error sending data to FreeAgent");
+              return false;
+            }
+          }) //end ajax to FreeAgent
+        },
+        error: function(d){
+          console.log("ajax error retrieving data from users.php");
+          return false;
+        }
+      }); //end ajax to users.php
+
+  } //end edit aciton
+
+  // if(action == "remove"){
+  //   console.log("e",e);
+  //   console.log("action",action)
+  //   console.log("this",this);
+  //   console.log(timeslipEditor.field('ccrp_timeslips.url').val());
+
+  //   url = this.get('ccrp_timeslips.url');
+  //   console.log("url",url);
+  //   test = this.get('ccrp_timeslips.id');
+  //   console.log("test",test);
+  //   return false;
+  // } //end delete action
     
   
-  }) //end preSubmit
+}) //end preSubmit
+// run a seperate "preSubmit" action, as deleting means I can't get at the data via the editor.field.val() method.
+timeslipEditor.on('preSubmit',function(e,d,action){
+
+  if(action == "remove"){
+    console.log('d',d);
+    data = d.data;
+    //find the data! (the key is the row_id; different every time); 
+    
+    for (var k in data) {
+      if(typeof data[k] !== 'function'){
+        console.log("key = ", k);
+        row = data[k];
+    
+        //url is the FreeAgent URL stored when the record was first created.
+        url = row.ccrp_timeslips.url;
+        console.log('url',url);
+        
+        post_data = {
+          "url": url,
+          "action": "delete_timeslip"
+        }
+
+        jQuery.ajax({
+          aysnc: false,
+          method: "POST",
+          url: vars.editorurl + "/mcknight_freeAgent.php",
+          data: post_data,
+          success: function(d){
+            console.log("deleted",d);
+
+          },
+          error: function(d){
+            console.log("error sending delete request");
+            return false;
+          }
+        })
+      }
+    }
+    //return false;
+  } //return if remove;
+  
+})
 
 
    //setup hidden datatables:
@@ -707,7 +802,10 @@ function timeslipTable() {
       {data: "ccrp_timeslips.task_id", title: "Task", visible: false},
       {data: "wp_users.display_name", title: "Staff"},
       {data: "ccrp_timeslips.date", title: "Date"},
-      {data: "ccrp_timeslips.hours", title: "Hours"}
+      {data: "ccrp_timeslips.hours", title: "Hours"},
+      {data: "ccrp_timeslips.comment", title: "Comment"},
+      {data: "ccrp_timeslips.url",title:"FreeAgent URL",visible:false}
+
       ];
 
       timeslipsTable = jQuery('#timeslips_table').DataTable({

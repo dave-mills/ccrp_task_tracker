@@ -35,12 +35,10 @@
       $info[$x]['name'] = $main->users[$x]->first_name;
       $info[$x]['url'] = $main->users[$x]->url;
     }
-  
-  $return = "<pre>" . var_export($info, true) . "</pre>";
-  echo $return;
-  }
+    $return = "<pre>" . var_export($info, true) . "</pre>";
+    echo $return;
+  } //end test action
 
-  // /////
   if($action == "add_timeslip") {
 
     $user = $_POST['user']; 
@@ -82,29 +80,80 @@
 
     // echo var_dump($response);
     // die();
-    }
+  } // end add_timeslip action
 
-  if($action == "get_timeslip") {
-    $response = $client->request(
-      "GET",
-      "https://api.freeagent.com/v2/timeslips/21245283"
+  // if($action == "get_timeslip") {
+  //   $response = $client->request(
+  //     "GET",
+  //     "https://api.freeagent.com/v2/timeslips/21245283"
+  //   );
+  //   $body = $response->getBody();
+  //   echo $body;
+  //   die();
+  // } //end "get timeslip action"
+
+  if($action == "edit_timeslip") {
+
+    $timeslip_url = $_POST['url'];
+    $user = $_POST['user']; 
+    $project = "https://api.freeagent.com/v2/projects/1275080";
+    $task = "https://api.freeagent.com/v2/tasks/1997008";
+    $dated_on = $_POST['date'];
+    $hours = $_POST['hours'];
+    $comment = $_POST['comment'];
+
+    $timeslip = [
+      "timeslip" => [
+        "project" => $project,
+        "task" => $task,
+        "dated_on" => $dated_on,
+        "hours" => $hours,
+        "user" => $user,
+        "comment" => $comment
+      ]
+    ];
+
+    try {
+      $response = $client->request(
+      "PUT",
+      $timeslip_url,
+      ['form_params'=>$timeslip]
     );
+
     $body = $response->getBody();
     echo $body;
     die();
-  }
 
-// $r = $client->request('POST', 'http://httpbin.org/post', ['body' => $timeslip]);
+    } catch (RequestException $e) {
+      echo Psr7\str($e->getRequest());
+      if($e->hasResponse()){
+        echo Psr7\str($e->getResponse());
+      }
+      die();
+    } //end catch
+    
+  } //end edit_timeslip;
 
-//   url   The unique identifier for the timeslip  URI
-// ✔   task  Task that was completed   URI
-// ✔   user  User that completed the task  URI
-// ✔   project   Project for which the task was completed  URI
-// ✔   dated_on  Date of the timeslip, in YYYY-MM-DD format  Date
-// ✔   hours   
+  if($action == "delete_timeslip") {
+    
+    $timeslip_url = $_POST['url'];
 
-// Number of hours worked
-// For e.g. 1:30 hours, use 1.5  Decimal
-//   comment   Free-text comment
-//   ?>
+    try {
+      $response = $client->request(
+        "DELETE",
+        $timeslip_url
+      );
+
+    $body = $response->getBody();
+    echo $body;
+    die();
+    } catch (RequestException $e) {
+      echo Psr7\str($e->getRequest());
+      if($e->hasResponse()){
+        echo Psr7\str($e->getResponse());
+      }
+      die();
+    } //end catch
+  } //end delete timeslip
+
 
