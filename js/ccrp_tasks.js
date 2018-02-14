@@ -45,7 +45,8 @@ jQuery(document).ready(function($){
     },
     {
       label:"Date",
-      type:"date",
+      type:"datetime",
+      format:"YYYY-MM-DD",
       labelInfo: "enter date of the work done",
       name:"ccrp_timeslips.date"
     },
