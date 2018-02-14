@@ -299,7 +299,7 @@ jQuery(document).ready(function($){
       var comment = timeslipEditor.field('ccrp_timeslips.comment').val();
       var timeslip_url = timeslipEditor.field('ccrp_timeslips.url').val();
 
-      if(timeslip_url == "") {
+      if(timeslip_url == "" || timeslip_url == null) {
       var post_action = "add_timeslip";
       console.log("should add not edit");
       
