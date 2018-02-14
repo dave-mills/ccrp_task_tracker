@@ -7,8 +7,8 @@
 // DataTables PHP library
 // !!! RESET THIS BEFORE PUSHING TO SERVER !!!
 
-// include( $_SERVER['DOCUMENT_ROOT'] . "/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
-include( $_SERVER['DOCUMENT_ROOT'] . "/stats4sd.org/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
+include( $_SERVER['DOCUMENT_ROOT'] . "/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
+//include( $_SERVER['DOCUMENT_ROOT'] . "/stats4sd.org/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
 
 // Alias Editor classes so they are easy to use
 use
