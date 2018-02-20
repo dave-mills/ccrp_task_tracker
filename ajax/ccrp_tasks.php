@@ -24,7 +24,7 @@ Editor::inst( $db, 'ccrp_tasks' )
   ->fields(
     // Document Table Data
     Field::inst( 'ccrp_tasks.id' )->validator( 'Validate::notEmpty' ),
-    Field::inst( 'ccrp_tasks.title'),
+    // Field::inst( 'ccrp_tasks.title'),
     Field::inst( 'ccrp_tasks.activities' ),
     Field::inst( 'ccrp_tasks.products' ),
     Field::inst( 'ccrp_tasks.date' ),

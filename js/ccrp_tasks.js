@@ -128,11 +128,11 @@ jQuery(document).ready(function($){
     table: "#ccrp_tasks_table",
     template: "#task_editor",
     fields: [
-      {
-        label: "Title",
-        type: "text",
-        name: "ccrp_tasks.title"
-      },
+      // {
+      //   label: "Title",
+      //   type: "text",
+      //   name: "ccrp_tasks.title"
+      // },
       {
         label: "Activities / Tasks",
         type: "textarea",
@@ -495,7 +495,7 @@ timeslipEditor.on('preSubmit',function(e,d,action){
     { data: "id", title: "More Info", render: function(data,type,row,meta){
            return "<span class='fa fa-plus-circle commButton' id='taskInfo_" + data + "'></span>";
           }, "className":"trPlus"},
-    {data: "ccrp_tasks.title", title: "Task title", width: "10%"},
+    // {data: "ccrp_tasks.title", title: "Task title", width: "10%"},
     {data: "ccrp_tasks.activities", title: "Activities", width: "15%"},
     {data: "ccrp_tasks.products",title:"Products", width: "15%"},
     {data: "primary_responsibility_name",title:"Responsibility"},
