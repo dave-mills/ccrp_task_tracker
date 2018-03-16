@@ -7,8 +7,8 @@
 // DataTables PHP library
 // !!! RESET THIS BEFORE PUSHING TO SERVER !!!
 
-include( $_SERVER['DOCUMENT_ROOT'] . "/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
-//include( $_SERVER['DOCUMENT_ROOT'] . "/stats4sd.org/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
+//include( $_SERVER['DOCUMENT_ROOT'] . "/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
+include( $_SERVER['DOCUMENT_ROOT'] . "/stats4sd.org/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
 
 // Alias Editor classes so they are easy to use
 use
@@ -29,7 +29,7 @@ Editor::inst( $db, 'ccrp_timeslips' )
     ->options( Options::inst()
                 ->table('ccrp_tasks')
                 ->value('id')
-                ->label('activities')
+                ->label('activity')
               ),
     Field::inst( 'ccrp_timeslips.staff_id' )
     ->options( Options::inst()
@@ -42,7 +42,7 @@ Editor::inst( $db, 'ccrp_timeslips' )
     Field::inst( 'ccrp_timeslips.date' ),
 
     Field::inst('wp_users.display_name'),
-    Field::inst('ccrp_tasks.activities'),
+    Field::inst('ccrp_tasks.activity'),
 
     Field::inst('ccrp_timeslips.url'),
     Field::inst('ccrp_timeslips.chargeable')

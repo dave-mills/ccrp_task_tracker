@@ -134,18 +134,13 @@ jQuery(document).ready(function($){
       //   name: "ccrp_tasks.title"
       // },
       {
-        label: "Activities / Tasks",
-        type: "textarea",
-        name: "ccrp_tasks.activities"
+        label: "Activity Title",
+        className: "editor_title",
+        type: "text",
+        name: "ccrp_tasks.activity"
       },
       {
-        label: "Products",
-        type: "textarea",
-        labelInfo: "Leave blank if none. e.g. App templates, sharable resources, tangible products that can be referenced",
-        name: "ccrp_tasks.products"
-      },
-      {
-        label: "Date given to task",
+        label: "Date / range given to task",
         labelInfo: "Dates given are approximate - generally a month-range or approximate time of year.",
         name: "ccrp_tasks.date"
       },
@@ -164,6 +159,12 @@ jQuery(document).ready(function($){
         type: "select",
         multiple: true,
         name: "wp_users[].id"
+      },
+      {
+        label: "Where?",
+        type: "select",
+        multiple: true,
+        name: "ccrp_where[].id"
       },
       {
         label: "Program Area(s)",
@@ -496,16 +497,15 @@ timeslipEditor.on('preSubmit',function(e,d,action){
            return "<span class='fa fa-plus-circle commButton' id='taskInfo_" + data + "'></span>";
           }, "className":"trPlus"},
     // {data: "ccrp_tasks.title", title: "Task title", width: "10%"},
-    {data: "ccrp_tasks.activities", title: "Activities", width: "15%"},
-    {data: "ccrp_tasks.products",title:"Products", width: "15%"},
+    {data: "ccrp_tasks.activity", title: "Activity / Task", width: "15%"},
     {data: "primary_responsibility_name",title:"Responsibility"},
     {data: "wp_users", title:"Also involved", render: function(data,type,row,meta){
         return renderMultiCells(data,"secondary_responsibility_name");
         }// end function
-          
-
-        
-
+      },
+          {data: "ccrp_where", title:"Where", render: function(data,type,row,meta){
+          return renderMultiCells(data,"programarea");
+        }// end function
       },
     {data: "ccrp_programarea", title:"Program Area(s)", render: function(data,type,row,meta){
           return renderMultiCells(data,"programarea");
@@ -522,7 +522,7 @@ timeslipEditor.on('preSubmit',function(e,d,action){
         }
 
       },
-    {data: "ccrp_tasks.date",title:"Date"},
+    // {data: "ccrp_tasks.date",title:"Date"},
     {data: "ccrp_tasks.2017_report",title:"2017 Report", visible: false},
     {data: "ccrp_tasks.2018_status",title:"2018 Status", visible: false},
     {data: "ccrp_tasks.2018_comment",title:"2018 Comment", visible: false},
@@ -709,7 +709,7 @@ function taskChildRow(data, row, callback) {
         eight_status: data['ccrp_tasks']['2018_status'],
         eight_comment: data['ccrp_tasks']['2018_comment'],
         row_id: data['DT_RowId'],
-        task_name: data['ccrp_tasks']['activities'],
+        task_name: data['ccrp_tasks']['activity'],
         number_timeslips: timeslip_number,
         total_time: time,
         number_reports: report_number
@@ -844,7 +844,7 @@ function timeslipTable() {
     }
 
       timeslipColumns = [
-      {data: "ccrp_tasks.activities", title: "Task", visible: false},
+      {data: "ccrp_tasks.activity", title: "Task", visible: false},
       {data: "ccrp_timeslips.task_id", title: "Task", visible: false},
       {data: "wp_users.display_name", title: "Staff"},
       {data: "ccrp_timeslips.date", title: "Date"},
@@ -886,7 +886,7 @@ function timeslipTable() {
 
 function reportsTable() {
     reportColumns = [
-        {data: "ccrp_tasks.activities", title: "Task", visible: false},
+        {data: "ccrp_tasks.activity", title: "Task", visible: false},
         {data: "ccrp_reports.task_id", title: "Task", visible: false},
         {data: "wp_users.display_name", title: "Staff"},
         {data: "ccrp_reports_files.fileName", title: "File Name"},

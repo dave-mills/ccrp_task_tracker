@@ -7,8 +7,8 @@
 // DataTables PHP library
 // !!! RESET THIS BEFORE PUSHING TO SERVER !!!
 
-include( $_SERVER['DOCUMENT_ROOT'] . "/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
-//include( $_SERVER['DOCUMENT_ROOT'] . "/stats4sd.org/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
+//include( $_SERVER['DOCUMENT_ROOT'] . "/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
+include( $_SERVER['DOCUMENT_ROOT'] . "/stats4sd.org/wp-content/plugins/wordpress_datatables/DataTables_Editor/php/DataTables.php");
 // Alias Editor classes so they are easy to use
 use
   DataTables\Editor,
@@ -25,13 +25,13 @@ Editor::inst( $db, 'ccrp_tasks' )
     // Document Table Data
     Field::inst( 'ccrp_tasks.id' )->validator( 'Validate::notEmpty' ),
     // Field::inst( 'ccrp_tasks.title'),
-    Field::inst( 'ccrp_tasks.activities' ),
-    Field::inst( 'ccrp_tasks.products' ),
-    Field::inst( 'ccrp_tasks.date' ),
+    Field::inst( 'ccrp_tasks.activity' ),
+    // Field::inst( 'ccrp_tasks.products' ),
+    // Field::inst( 'ccrp_tasks.date' ),
     Field::inst( 'ccrp_tasks.2017_report' ),
     Field::inst( 'ccrp_tasks.2018_status' ),
     Field::inst( 'ccrp_tasks.2018_comment' ),
-    Field::inst( 'ccrp_tasks.details' ),
+    // Field::inst( 'ccrp_tasks.details' ),
 
     ////one-many join data
     
@@ -46,6 +46,21 @@ Editor::inst( $db, 'ccrp_tasks' )
     )
   ->leftJoin( 'wp_users','ccrp_tasks.responsibility','=','wp_users.id')
 
+  ->join(
+    Mjoin::inst('ccrp_where')
+      ->link('ccrp_tasks.id','ccrp_task_where.task_id')
+      ->link('ccrp_where.id','ccrp_task_where.where_id')
+      ->order('name asc')
+      ->fields(
+        Field::inst('id')
+          ->options(Options::inst()
+            ->table('ccrp_where')
+            ->value('id')
+            ->label('name')
+          ),
+        Field::inst( 'name' )
+      )
+    )
   //programarea
   ->join(
     Mjoin::inst('ccrp_programarea')
