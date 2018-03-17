@@ -57,5 +57,69 @@ Editor::inst( $db, 'ccrp_timeslips' )
     )
   ->leftJoin( 'wp_users','ccrp_timeslips.staff_id','=','wp_users.ID')
   ->leftJoin( 'ccrp_tasks','ccrp_timeslips.task_id','=','ccrp_tasks.id')
+
+   ->join(
+    Mjoin::inst('ccrp_where')
+      ->link('ccrp_timeslips.id','ccrp_timeslip_where.timeslip_id')
+      ->link('ccrp_where.id','ccrp_timeslip_where.where_id')
+      ->order('name asc')
+      ->fields(
+        Field::inst('id')
+          ->options(Options::inst()
+            ->table('ccrp_where')
+            ->value('id')
+            ->label('name')
+          ),
+        Field::inst( 'name' )
+      )
+    )
+  //programarea
+  ->join(
+    Mjoin::inst('ccrp_programarea')
+      ->link('ccrp_timeslips.id','ccrp_timeslip_programarea.timeslip_id')
+      ->link('ccrp_programarea.id','ccrp_timeslip_programarea.programarea_id')
+      ->order('programarea asc')
+      ->fields(
+        Field::inst('id')
+          ->options(Options::inst()
+            ->table('ccrp_programarea')
+            ->value('id')
+            ->label('programarea')
+          ),
+        Field::inst( 'programarea' )
+      )
+    )
+  //theme
+  ->join(
+    Mjoin::inst('ccrp_theme')
+      ->link('ccrp_timeslips.id','ccrp_timeslip_theme.timeslip_id')
+      ->link('ccrp_theme.id','ccrp_timeslip_theme.theme_id')
+      ->order('theme asc')
+      ->fields(
+        Field::inst('id')
+          ->options(Options::inst()
+            ->table('ccrp_theme')
+            ->value('id')
+            ->label('theme')
+          ),
+        Field::inst( 'theme' )
+      )
+    )
+  //method
+  ->join(
+    Mjoin::inst('ccrp_method')
+      ->link('ccrp_timeslips.id','ccrp_timeslip_method.timeslip_id')
+      ->link('ccrp_method.id','ccrp_timeslip_method.method_id')
+      ->order('method_type asc')
+      ->fields(
+        Field::inst('id')
+          ->options(Options::inst()
+            ->table('ccrp_method')
+            ->value('id')
+            ->label('method_type')
+          ),
+        Field::inst( 'method_type' )
+      )
+    )
   ->process( $_POST )
   ->json();

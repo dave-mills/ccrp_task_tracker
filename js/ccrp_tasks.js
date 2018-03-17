@@ -8,6 +8,8 @@ var taskEditor;
 var timeslipEditor;
 var reportEditor;
 
+var ccrp_tasks;
+
 var secondaryInit = 0;
 var rowShown = -1;
 
@@ -60,6 +62,30 @@ jQuery(document).ready(function($){
         }
     },
     {
+      label: "Where?",
+      type: "select",
+      multiple: true,
+      name: "ccrp_where[].id"
+    },
+    {
+      label: "Program Area(s)",
+      type: "select",
+      multiple: true,
+      name: "ccrp_programarea[].id"
+    },
+  {
+      label: "Theme(s)",
+      type: "select",
+      multiple: true,
+      name: "ccrp_theme[].id"
+    },
+        {
+      label: "Method / Type(s)",
+      type: "select",
+      multiple: true,
+      name: "ccrp_method[].id"
+    },
+    {
       type:"hidden",
       name:"ccrp_timeslips.url"
     },
@@ -68,11 +94,11 @@ jQuery(document).ready(function($){
       labelInfo:"Should this time be charged to the project? (Default is yes)",
       type:"radio",
       options:[{
-        label:"  Yes",
+        label:"Yes",
         value:"1"
       },
       {
-        label:"  No",
+        label:"No",
         value:"0"
       }],
       name:"ccrp_timeslips.chargeable"
@@ -234,7 +260,7 @@ jQuery(document).ready(function($){
   });
 
 
-  //add hook to send new timeslips directly to FreeAgent: 
+  //add hook to send new timeslips directly to FreeAgent:
   //
   timeslipEditor.on('initSubmit',function(e,action){
 
@@ -309,11 +335,11 @@ jQuery(document).ready(function($){
           return false;
         }
       }); //end ajax to users.php
-   } // end CREATE function
+    } // end CREATE function
 
 
-  if(action == "edit"){
-    console.log(timeslipEditor.field('ccrp_timeslips.url').val());
+    if(action == "edit"){
+      console.log(timeslipEditor.field('ccrp_timeslips.url').val());
 
 
       var staff_id = timeslipEditor.field('ccrp_timeslips.staff_id').val();
@@ -393,73 +419,75 @@ jQuery(document).ready(function($){
         }
       }); //end ajax to users.php
 
-  } //end edit aciton
+    } //end edit aciton
 
-  // if(action == "remove"){
-  //   console.log("e",e);
-  //   console.log("action",action)
-  //   console.log("this",this);
-  //   console.log(timeslipEditor.field('ccrp_timeslips.url').val());
+    // if(action == "remove"){
+    //   console.log("e",e);
+    //   console.log("action",action)
+    //   console.log("this",this);
+    //   console.log(timeslipEditor.field('ccrp_timeslips.url').val());
 
-  //   url = this.get('ccrp_timeslips.url');
-  //   console.log("url",url);
-  //   test = this.get('ccrp_timeslips.id');
-  //   console.log("test",test);
-  //   return false;
-  // } //end delete action
-    
-  
-}) //end preSubmit
-// run a seperate "preSubmit" action, as deleting means I can't get at the data via the editor.field.val() method.
-timeslipEditor.on('preSubmit',function(e,d,action){
+    //   url = this.get('ccrp_timeslips.url');
+    //   console.log("url",url);
+    //   test = this.get('ccrp_timeslips.id');
+    //   console.log("test",test);
+    //   return false;
+    // } //end delete action
+  }) //end initSubmit
 
-  if(action == "remove"){
-    console.log('d',d);
-    data = d.data;
-    //find the data! (the key is the row_id; different every time); 
-    
-    for (var k in data) {
-      if(typeof data[k] !== 'function'){
-        console.log("key = ", k);
-        row = data[k];
-    
-        //url is the FreeAgent URL stored when the record was first created.
-        url = row.ccrp_timeslips.url;
-        console.log('url',url);
-        
-        post_data = {
-          "url": url,
-          "action": "delete_timeslip"
-        }
+  // run a seperate "preSubmit" action, as deleting means I can't get at the data via the editor.field.val() method.
+  timeslipEditor.on('preSubmit',function(e,d,action){
 
-        jQuery.ajax({
-          aysnc: false,
-          method: "POST",
-          url: vars.editorurl + "/mcknight_freeAgent.php",
-          data: post_data,
-          success: function(d){
-            console.log("deleted",d);
-
-          },
-          error: function(d){
-            console.log("error sending delete request");
-            return false;
+    if(action == "remove"){
+      console.log('d',d);
+      data = d.data;
+      //find the data! (the key is the row_id; different every time); 
+      
+      for (var k in data) {
+        if(typeof data[k] !== 'function'){
+          console.log("key = ", k);
+          row = data[k];
+      
+          //url is the FreeAgent URL stored when the record was first created.
+          url = row.ccrp_timeslips.url;
+          console.log('url',url);
+          
+          post_data = {
+            "url": url,
+            "action": "delete_timeslip"
           }
-        })
+
+          jQuery.ajax({
+            aysnc: false,
+            method: "POST",
+            url: vars.editorurl + "/mcknight_freeAgent.php",
+            data: post_data,
+            success: function(d){
+              console.log("deleted",d);
+
+            },
+            error: function(d){
+              console.log("error sending delete request");
+              return false;
+            }
+          })
+        }
       }
-    }
-    //return false;
-  } //return if remove;
-  
-})
+      //return false;
+    } //return if remove;
+  })
 
+  taskEditor.on('postEdit',function(e,json,data){
+    ccrp_tasks = tasksTable.data().toArray();
+  })
 
-   //setup hidden datatables:
+  //setup hidden datatables:
   timeslipTable();
   reportsTable();
 
-  //setup top buttons: 
+  //setup top buttons:
   jQuery('#view_all_timeslips').click(function(){
+    jQuery("#timeslips_header").html("All Timeslips");
     jQuery("#timeslips_wrapper").modal("show");
     timeslipsTable.columns(0).visible(true);
     timeslipsTable.columns( 1 )
@@ -468,6 +496,7 @@ timeslipEditor.on('preSubmit',function(e,d,action){
   });
 
   jQuery('#view_all_reports').click(function(){
+    jQuery("#reports_header").html("All Reports");
     jQuery("#reports_wrapper").modal("show");
     reportsTable.columns(0).visible(true);
     reportsTable.columns( 1 )
@@ -481,46 +510,45 @@ timeslipEditor.on('preSubmit',function(e,d,action){
       .buttons("create")
       .create()
       .set( 'ccrp_timeslips.staff_id', vars.current_user );
-;
   });
-    jQuery('#add_report_main').click(function(){
+  
+  jQuery('#add_report_main').click(function(){
     reportEditor
       .buttons("create")
       .create()
       .set( 'ccrp_reports.staff_id', vars.current_user );
-;
   });
 
   // Setup datatable columns for main task table:
   taskColumns = [
-    { data: "id", title: "More Info", render: function(data,type,row,meta){
-           return "<span class='fa fa-plus-circle commButton' id='taskInfo_" + data + "'></span>";
-          }, "className":"trPlus"},
+    // { data: "id", title: "More Info", render: function(data,type,row,meta){
+    //        return "<span class='fa fa-plus-circle commButton' id='taskInfo_" + data + "'></span>";
+    //       }, "className":"trPlus"},
     // {data: "ccrp_tasks.title", title: "Task title", width: "10%"},
     {data: "ccrp_tasks.activity", title: "Activity / Task", width: "15%"},
-    {data: "primary_responsibility_name",title:"Responsibility"},
+    {data: "ccrp_tasks.primary_responsibility_name",title:"Responsibility"},
     {data: "wp_users", title:"Also involved", render: function(data,type,row,meta){
         return renderMultiCells(data,"secondary_responsibility_name");
         }// end function
       },
           {data: "ccrp_where", title:"Where", render: function(data,type,row,meta){
-          return renderMultiCells(data,"programarea");
+          return renderMultiCells(data,"name");
         }// end function
       },
     {data: "ccrp_programarea", title:"Program Area(s)", render: function(data,type,row,meta){
           return renderMultiCells(data,"programarea");
         }// end function
-
+        ,visible: false
       },
     {data: "ccrp_theme", title:"Theme(s)", render: function(data,type,row,meta){
         return renderMultiCells(data,"theme");
         }
-
+        ,visible: false
       },
       {data: "ccrp_method", title:"Method / Activity Type(s)", render: function(data,type,row,meta){
         return renderMultiCells(data,"method_type");
         }
-
+        ,visible: false
       },
     // {data: "ccrp_tasks.date",title:"Date"},
     {data: "ccrp_tasks.2017_report",title:"2017 Report", visible: false},
@@ -550,243 +578,71 @@ timeslipEditor.on('preSubmit',function(e,d,action){
     pageLength: 150
   });
 
+  
+
   tasksTable.on('init.dt',function(){
     console.log("full data", tasksTable.data());
+    ccrp_tasks = tasksTable.data().toArray();
   });
 
 
+  tasksTable.on('select',function(e,dt,type,indexes){
+    if(type === 'row'){
+      //get the template:
+      
+      var template = jQuery('#task_details_pane_template').html();
+      data = tasksTable.rows(indexes).data();
+      console.log(data);
+      //add the index into the data for rendering(for edit / add buttons)
+      data[0].index = indexes[0];
+      var html = Mustache.render(template,data[0]);
+      jQuery('#task_details_pane').html(html);
+    }
+  })
+
   //Setup task table filters
-    yadcf.init(tasksTable, [
-          {
-            column_number: 3,
-            filter_container_id: "resp_filter",
-            filter_type:"multi_select",
-            select_type:"select2",
-            // html_data_type:"text",
-            style_class:"ccrp_filter",
-            select_type_options:{
-              placeholder: "Select Program Area(s)",
-              // allowClear : true // show 'x' next to selection inseide the select itself
-              width:"80%"
-            },
-            reset_button_style_class:"ccrp_filter_reset",
-            filter_default_label:"Select Person",
-            reset_button_style_class:"btn btn-primary ml-3",
-            filter_reset_button_text: "Reset" // hide yadcf reset button
-          },
-          //           {
-          //   column_number: 5,
-          //   filter_container_id: "programaea_filter",
-          //   filter_type:"multi_select",
-          //   select_type:"select2",
-          //   // column_data_type:"html",
-          //   // html_data_type:"text",
-          //   select_type_options:{
-          //     placeholder: "Select Program Area(s)",
-          //     // allowClear : true // show 'x' next to selection inseide the select itself
-          //     width:"80%"
-          //   },
-          //   filter_default_label:"Select Program Area",
-          //   style_class:"col-sm-8",
-          //   reset_button_style_class:"btn btn-primary ml-3",
-          //   filter_reset_button_text: "Reset" // hide yadcf reset button
-          // },
-          //           {
-          //   column_number: 6,
-          //   filter_container_id: "theme_filter",
-          //   filter_type:"multi_select",
-          //   select_type:"select2",
-          //   select_type_options:{
-          //     placeholder: "Select Program Area(s)",
-          //     // allowClear : true // show 'x' next to selection inseide the select itself
-          //     width:"80%"
-          //   },
-          //   filter_default_label:"Select Theme",
-          //   reset_button_style_class:"btn btn-primary ml-3",
-          //   filter_reset_button_text: "Reset" // hide yadcf reset button
-          // },
-          //           {
-          //   column_number: 7,
-          //   filter_container_id: "method_filter",
-          //   filter_type:"multi_select",
-          //   select_type:"select2",
-          //   select_type_options:{
-          //     placeholder: "Select Program Area(s)",
-          //     // allowClear : true // show 'x' next to selection inseide the select itself
-          //     width:"80%"
-          //   },
-          //   filter_default_label:"Select Theme",
-          //   reset_button_style_class:"btn btn-primary ml-3",
-          //   filter_reset_button_text: "Reset" // hide yadcf reset button
-          // },
-          ],
-          {
-            // cumulative_filtering: true
-          }
-    );
+  yadcf.init(tasksTable, [
+    {
+      column_number: 3,
+      filter_container_id: "resp_filter",
+      filter_type:"multi_select",
+      select_type:"select2",
+      // html_data_type:"text",
+      style_class:"ccrp_filter",
+      select_type_options:{
+        placeholder: "Select Program Area(s)",
+        // allowClear : true // show 'x' next to selection inseide the select itself
+        width:"80%"
+      },
+      reset_button_style_class:"ccrp_filter_reset",
+      filter_default_label:"Select Person",
+      reset_button_style_class:"btn btn-primary ml-3",
+      filter_reset_button_text: "Reset" // hide yadcf reset button
+    }
+    ]
+  );
   
   console.log("current user = ",vars.current_user);
 
-  //setup child row for task table: 
-  jQuery('#ccrp_tasks_table tbody').on('click', 'td.trPlus', function () {
-            console.log("clicked");
-            //get the row of the clicked icon
-            var tr = jQuery(this).parents('tr');
-            var row = tasksTable.row( tr );
-            console.log(row);
+  // });
 
-            //check if child row is already shown.
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
-                console.log("isShown is true");
-                row.child.hide();
-                rowShown = -1;
-                console.log(rowShown);
-                
-            }
-            else {
+  jQuery("#testButton").click(function(){
+     jQuery.ajax({
+      method: "POST",
+        url: vars.editorurl + "/mcknight_freeAgent.php",
+        data: {
+          action:"test"
+        },
+        success: function(d){
+          console.log("freeAgentresponse =",d);
+          jQuery("#testBed").html(d);
 
-                //first, close any other child rows:
-                if ( rowShown > -1) {
-                  tasksTable.row(rowShown).child.hide();
-                };
-
-                //if there is a child row, open it.
-                if(row.child() && row.child().length)
-                {
-                    console.log("row exists, showing");
-                    displayChildRow(row,null);
-                }
-                else {
-                    //else, create the child row then show it.
-                    taskChildRow(row.data(),row,displayChildRow);
-                 }
-                rowShown = row.index();
-                console.log(rowShown);
-            }
-        } );
-
-// jQuery("#testButton").click(function(){
-//    jQuery.ajax({
-//     method: "POST",
-//       url: vars.editorurl + "/mcknight_freeAgent.php",
-//       data: {
-//         action:"test"
-//       },
-//       success: function(d){
-//         console.log("freeAgentresponse =",d);
-//         jQuery("#testBed").html(d);
-
-//       }
-//     });
-//   });
+        }
+      });
+    });
 
 }); //END DOCUMENT READY
 
-//function to craete a child row for the task table:
-//
-function taskChildRow(data, row, callback) {
-  console.log("taskChildRow function");
-  console.log(data);
-
-  timeslip_number = data.ccrp_timeslips.length;
-  report_number = data.ccrp_reports.length;
-  time = 0;
-  for(x = 0;x<timeslip_number;x++){
-    num_time = Number(data.ccrp_timeslips[x]["hours"]);
-    time += num_time;
-  }
-
-  time = time / 7;
-  time = time.toFixed(2)
-  jQuery.ajax({
-    url: vars.editorurl + "/taskchild.mst",
-    success: function(d){
-      console.log("got taskchild.html",d);
-      console.log(data['ccrp_tasks']['2017_report']);
-      var rendered = Mustache.render(d,{
-        seven_report: data['ccrp_tasks']['2017_report'],
-        eight_status: data['ccrp_tasks']['2018_status'],
-        eight_comment: data['ccrp_tasks']['2018_comment'],
-        row_id: data['DT_RowId'],
-        task_name: data['ccrp_tasks']['activity'],
-        number_timeslips: timeslip_number,
-        total_time: time,
-        number_reports: report_number
-      });
-      callback(row,rendered);
-
-    }});
-}
-
-function displayChildRow(row,html){
-
-  if(html){
-      row.child(html).show();
-  }
-
-  else {
-    row.child.show();
-  }
-
-  console.log("row = ",row.data());
-  data = row.data();
-
-  //filter hidden subtables:
-  filterSubTables(data);
-
-  //once it's shown, prepare buttons:
-  //Edit Button
-  jQuery("#ccrp_tasks_table").on('click', 'button.edit_row', function (e) {
-    e.preventDefault();
-    console.log("clicked edit");
-
-    //trigger the editor manually, targeting the closest row in the table. 
-    taskEditor.edit(jQuery(this).closest('tr').prev()[0], {
-        title: 'Edit record',
-        buttons: 'Update'
-    });
-  });
-
-  //Add timeslip button
-  jQuery("#ccrp_tasks_table").on("click","button.add_timeslip",function(e){
-    e.preventDefault();
-    console.log("clicked Add timeslip");
-
-    timeslipEditor
-            .title('Create new timeslip')
-            .buttons('Create')
-            .create()
-            .set( 'ccrp_timeslips.task_id', data.ccrp_tasks.id )
-            .set( 'ccrp_timeslips.staff_id', vars.current_user );
-  });
-
-  //View timeslips button
-  jQuery("#ccrp_tasks_table").on("click","button.view_timeslips",function(e){
-    e.preventDefault();
-    jQuery("#timeslips_wrapper").modal("show");
-  });
-
-  //Add report button
-  jQuery("#ccrp_tasks_table").on("click","button.add_report",function(e){
-    e.preventDefault();
-    console.log("clicked add report");
-
-    reportEditor.title("Create new report")
-    .buttons("create")
-    .create()
-    .set( 'ccrp_reports.task_id', data.ccrp_tasks.id )
-    .set( 'ccrp_reports.staff_id', vars.current_user );
-  });
-
-  //View reports button
-  jQuery("#ccrp_tasks_table").on("click","button.view_reports",function(e){
-    e.preventDefault();
-    console.log("clicked view reports");
-    jQuery("#reports_wrapper").modal("show");
-  });
-  
-}
 
 
 function renderMultiCells(data,variableName){
@@ -812,22 +668,35 @@ function renderMultiCells(data,variableName){
           return string;
 }
 
-function getFreeAgentData(){
-  
-}
 
-function filterSubTables(data){
-  console.log("filting to show tasks with ID = ",data.ccrp_tasks.id);
+function filterSubTables(task_id){
+  var task_name;
+  //Get the task name:
+  console.log("ccrp tasks",ccrp_tasks)
+
+  ccrp_tasks.some(function(item,index){
+    if(item.ccrp_tasks.id === task_id){
+      task_name = item.ccrp_tasks.activity;
+      return true;
+    }
+    return false;
+  })
+
+
+
+  console.log("filting to show tasks with ID = ",task_id);
   timeslipsTable.columns(0).visible(false);
-  timeslipsTable.columns( 1 ).visible(false)
-        .search( data.ccrp_tasks.id )
+  timeslipsTable.columns( 1 ).visible(true)
+        .search( "^"+task_id+"$",true,false )
         .draw();
 
   reportsTable.columns(0).visible(false);
-  reportsTable.columns(1).visible(false)
-    .search(data.ccrp_tasks.id)
+  reportsTable.columns(1).visible(true)
+    .search( "^"+task_id+"$",true,false )
     .draw();
 
+  jQuery('#timeslips_header').html("Timeslips for Task: "+task_name)
+  jQuery('#reports_header').html("Reports for Task: "+task_name)
 
 }
 
@@ -844,8 +713,8 @@ function timeslipTable() {
     }
 
       timeslipColumns = [
-      {data: "ccrp_tasks.activity", title: "Task", visible: false},
-      {data: "ccrp_timeslips.task_id", title: "Task", visible: false},
+      {data: "ccrp_tasks.activity", title: "Task", visible:false},
+      {data: "ccrp_timeslips.task_id", title: "Task", visible:true},
       {data: "wp_users.display_name", title: "Staff"},
       {data: "ccrp_timeslips.date", title: "Date"},
       {data: "ccrp_timeslips.hours", title: "Hours"},
@@ -887,7 +756,7 @@ function timeslipTable() {
 function reportsTable() {
     reportColumns = [
         {data: "ccrp_tasks.activity", title: "Task", visible: false},
-        {data: "ccrp_reports.task_id", title: "Task", visible: false},
+        {data: "ccrp_reports.task_id", title: "Task", visible: true},
         {data: "wp_users.display_name", title: "Staff"},
         {data: "ccrp_reports_files.fileName", title: "File Name"},
         {data: "ccrp_reports_files.fileUrl", title: "File Url"},
@@ -904,12 +773,125 @@ function reportsTable() {
           extend: 'csv',
           text: "Download Reports Data (csv)"
         },
-        { extend: "create", editor: timeslipEditor },
-        { extend: "edit",   editor: timeslipEditor },
-        { extend: "remove", editor: timeslipEditor }
+        { extend: "create", editor: reportEditor },
+        { extend: "edit",   editor: reportEditor },
+        { extend: "remove", editor: reportEditor }
         ],
         pageLength: 150
       });
 
     
+}
+
+/// Functions for the Task Details bottom panel;
+
+function edit_task(index){
+    console.log("clicked edit");
+
+    //trigger the editor manually, targeting the closest row in the table. 
+    taskEditor.edit("#ccrp_tasks_table tbody tr:eq("+index+")", {
+        title: 'Edit Task',
+        buttons: 'Update'
+    });
+}
+
+
+function view_timeslips(task_id){
+    
+    filterSubTables(task_id);
+    jQuery("#timeslips_wrapper").modal("show");
+
+}
+
+function view_reports(task_id){
+
+    filterSubTables(task_id);
+    jQuery("#reports_wrapper").modal("show");
+
+}
+
+function add_timeslip(task_id){
+  
+  //get tags for current task_id
+  var method = [];
+  var where = [];
+  var theme = [];
+  var programarea = [];
+
+  item = task = get_task_by_id(task_id);
+
+  //go through method array and trawl for ids:
+  item.ccrp_method.forEach(function(item,index){
+    method.push(item.id);
+  })
+
+  item.ccrp_programarea.forEach(function(item,index){
+    programarea.push(item.id);
+  })
+
+  item.ccrp_theme.forEach(function(item,index){
+    theme.push(item.id);
+  })
+
+  item.ccrp_where.forEach(function(item,index){
+    where.push(item.id);
+  })
+
+  timeslipEditor
+    .title("Add New Timeslips record for task:" + item.ccrp_task.activity)
+    .buttons("Save")
+    .create()
+    .set("ccrp_timeslips.task_id",task_id)
+    .set("ccrp_timeslips.staff_id",vars.current_user)
+    .set("ccrp_timeslips.chargeable",1)
+    .set("ccrp_where[].id",where)
+    .set("ccrp_method[].id",method)
+    .set("ccrp_programarea[].id",programarea)
+    .set("ccrp_theme[].id",theme)
+    
+
+}
+
+function test_timeslip(){
+  
+  checkVals = {
+    "task": timeslipEditor.get("ccrp_timeslips.task_id"),
+    "comment": timeslipEditor.get("ccrp_timeslips.comment"),
+    "hours": timeslipEditor.get("ccrp_timeslips.hours"),
+    "date": timeslipEditor.get("ccrp_timeslips.date"),
+    "staff_id": timeslipEditor.get("ccrp_timeslips.staff_id"),
+    "where": timeslipEditor.get("ccrp_where[].id"),
+    "programarea": timeslipEditor.get("ccrp_programarea[].id"),
+    "theme": timeslipEditor.get("ccrp_theme[].id"),
+    "method": timeslipEditor.get("ccrp_method[].id")
+  }
+
+  console.log(checkVals)
+}
+
+function add_report(task_id){
+
+  task = get_task_by_id(task_id);
+
+  reportEditor
+  .title("Add New Record for task - " + task.ccrp_tasks.activity)
+  .buttons("Save")
+  .create()
+  .set("ccrp_reports.task_id", task_id)
+  .set("ccrp_reports.staff_id",vars.current_user);
+}
+
+
+function get_task_by_id(id){
+  var task; 
+
+  ccrp_tasks.some(function(item,index){
+    if(item.ccrp_tasks.id == id){
+      task = item;
+      return true;
+    }
+    return false;
+  })
+
+  return task;
 }

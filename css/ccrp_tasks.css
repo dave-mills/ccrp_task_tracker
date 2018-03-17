@@ -22,7 +22,7 @@
 }
 
 .table_padding {
-  min-width:1300px!important;
+  /*min-width:1300px!important;*/
 }
 
 .ccrp_filter {
@@ -47,4 +47,22 @@
 
 #left-area ul, .entry-content ul, .comment-content ul, body.et-pb-preview #main-content .container ul {
   list-style-type: none!important;
+}
+
+.custom-scroll {
+  max-height: 1000px;
+  overflow-y: scroll;
+}
+
+.badge-large {
+  font-size: 100%!important;
+}
+
+input[type="radio"] + label {
+  padding-left: 5px;
+}
+
+
+.page-template-page-template-ccrp_tasks .entry-content {
+  padding-left: 10px;
 }

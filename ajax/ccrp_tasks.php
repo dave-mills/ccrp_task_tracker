@@ -36,7 +36,7 @@ Editor::inst( $db, 'ccrp_tasks' )
     // Field::inst( 'ccrp_tasks.title'),
     Field::inst( 'ccrp_tasks.activity' ),
     // Field::inst( 'ccrp_tasks.products' ),
-    // Field::inst( 'ccrp_tasks.date' ),
+    Field::inst( 'ccrp_tasks.date' ),
     Field::inst( 'ccrp_tasks.2017_report' ),
     Field::inst( 'ccrp_tasks.2018_status' ),
     Field::inst( 'ccrp_tasks.2018_comment' ),
@@ -51,7 +51,7 @@ Editor::inst( $db, 'ccrp_tasks' )
                 ->value('id')
                 ->label('display_name')
               ),
-    Field::inst('wp_users.display_name','primary_responsibility_name')
+    Field::inst('wp_users.display_name','ccrp_tasks.primary_responsibility_name')
     )
   ->leftJoin( 'wp_users','ccrp_tasks.responsibility','=','wp_users.id')
 
