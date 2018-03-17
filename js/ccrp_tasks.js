@@ -838,7 +838,7 @@ function add_timeslip(task_id){
   })
 
   timeslipEditor
-    .title("Add New Timeslips record for task:" + item.ccrp_task.activity)
+    .title("Add New Timeslips record for task:" + item.ccrp_tasks.activity)
     .buttons("Save")
     .create()
     .set("ccrp_timeslips.task_id",task_id)
