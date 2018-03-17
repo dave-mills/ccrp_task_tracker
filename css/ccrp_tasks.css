@@ -66,3 +66,7 @@ input[type="radio"] + label {
 .page-template-page-template-ccrp_tasks .entry-content {
   padding-left: 10px;
 }
+
+.btn-text-small {
+  font-size: 0.8em;
+}

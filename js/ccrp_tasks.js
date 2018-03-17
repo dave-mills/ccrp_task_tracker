@@ -895,3 +895,12 @@ function get_task_by_id(id){
 
   return task;
 }
+
+function add_generic_timeslip(){
+  timeslipEditor
+  .title("Add New Timeslip not related to any project")
+  .buttons("Save")
+  .create()
+  .set("ccrp_timeslips.task_id",35)
+  .set("ccrp_timeslips.staff_id",vars.current_user);
+}
