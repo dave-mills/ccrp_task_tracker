@@ -592,9 +592,8 @@ jQuery(document).ready(function($){
       
       var template = jQuery('#task_details_pane_template').html();
       data = tasksTable.rows(indexes).data();
-      console.log(data);
       //add the index into the data for rendering(for edit / add buttons)
-      data[0].index = indexes[0];
+      console.log(data[0])
       var html = Mustache.render(template,data[0]);
       jQuery('#task_details_pane').html(html);
     }
@@ -787,9 +786,9 @@ function reportsTable() {
 
 function edit_task(index){
     console.log("clicked edit");
-
+    console.log("index: ",index);
     //trigger the editor manually, targeting the closest row in the table. 
-    taskEditor.edit("#ccrp_tasks_table tbody tr:eq("+index+")", {
+    taskEditor.edit("#ccrp_tasks_table tbody tr#"+index, {
         title: 'Edit Task',
         buttons: 'Update'
     });
