@@ -73,7 +73,7 @@ jQuery(document).ready(function($){
       multiple: true,
       name: "ccrp_programarea[].id"
     },
-  {
+    {
       label: "Theme(s)",
       type: "select",
       multiple: true,
@@ -264,6 +264,7 @@ jQuery(document).ready(function($){
   //
   timeslipEditor.on('initSubmit',function(e,action){
 
+    console.log()
     //When creating a new timeslip:
     if(action == "create") {
       console.log('event',e);
@@ -275,6 +276,24 @@ jQuery(document).ready(function($){
       var hours = timeslipEditor.field('ccrp_timeslips.hours').val();
       var comment = timeslipEditor.field('ccrp_timeslips.comment').val();
       var chargeable = timeslipEditor.field('ccrp_timeslips.chargeable').val();
+
+      errorDiv = document.querySelector('#error-message');
+      errorDiv.innerHTML = "";
+      error = false;
+      //check for empties:
+      if(!date) {
+        errorDiv.innerHTML += "<p class='alert alert-warning'>Please add a date.</p>"
+        error = true;
+      }
+
+      if(!hours) {
+        errorDiv.innerHTML += "<p class='alert alert-warning'>Please add the number of hours spent.</p>"
+        error = true;
+      }
+
+      if(error){
+        return false;
+      }
 
       // timeslip = editor_data.data[0]['ccrp_timeslips'];
       // console.log("timeslip",timeslip);
