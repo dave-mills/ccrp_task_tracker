@@ -36,7 +36,7 @@ Editor::inst( $db, 'ccrp_tasks' )
     // Field::inst( 'ccrp_tasks.title'),
     Field::inst( 'ccrp_tasks.activity' ),
     // Field::inst( 'ccrp_tasks.products' ),
-    Field::inst( 'ccrp_tasks.date' ),
+    Field::inst( 'ccrp_tasks.date' )->validator( 'Validate::notEmpty'),
     Field::inst( 'ccrp_tasks.2017_report' ),
     Field::inst( 'ccrp_tasks.2018_status' ),
     Field::inst( 'ccrp_tasks.2018_comment' ),
