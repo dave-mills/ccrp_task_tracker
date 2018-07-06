@@ -211,24 +211,32 @@ jQuery(document).ready(function($){
         name: "ccrp_method[].id"
       },
       {
-        label: "2017 Report",
+        label: "Status",
         type: "textarea",
-        labelInfo: "brief comments from main staff member on activity status - from December RMS meeting",
-        name: "ccrp_tasks.2017_report"
-
+        labelInfo: "Is task complete, ongoing or stopped?",
+        name: "ccrp_tasks.status"
       },
       {
-        label: "2018 Status",
+        label: "Comment",
         type: "textarea",
-        labelInfo: "is task complete, ongoing or stopped for 2018",
-        name: "ccrp_tasks.2018_status"
+        labelInfo: "General comments about this task",
+        name: "ccrp_tasks.comment"
       },
       {
-        label: "2018 Comment",
-        type: "textarea",
-        labelInfo: "Any comments about this activity going into 2018 - from December RMS meeting",
-        name: "ccrp_tasks.2018_comment"
-
+        label: "Year",
+        type: "select",
+        options:[
+        {
+          value: '2017-2018',
+          label: '2017-2018'
+        },
+        {
+          value: '2018-2019',
+          label: '2018-2019'
+        }
+        ],
+        labelInfo: "Year",
+        name: "ccrp_tasks.year"
       }
     ]
   });
@@ -545,6 +553,8 @@ jQuery(document).ready(function($){
     //       }, "className":"trPlus"},
     // {data: "ccrp_tasks.title", title: "Task title", width: "10%"},
     {data: "ccrp_tasks.activity", title: "Activity / Task", width: "15%"},
+    {data: "ccrp_tasks.year", title: "Year", visible: false},
+    {data: "ccrp_tasks.product", title: "Product(s)", visible: false},
     {data: "ccrp_tasks.primary_responsibility_name",title:"Responsibility"},
     {data: "wp_users", title:"Also involved", render: function(data,type,row,meta){
         return renderMultiCells(data,"secondary_responsibility_name");
@@ -571,8 +581,8 @@ jQuery(document).ready(function($){
       },
     // {data: "ccrp_tasks.date",title:"Date"},
     {data: "ccrp_tasks.2017_report",title:"2017 Report", visible: false},
-    {data: "ccrp_tasks.2018_status",title:"2018 Status", visible: false},
-    {data: "ccrp_tasks.2018_comment",title:"2018 Comment", visible: false},
+    {data: "ccrp_tasks.status",title:"Status", visible: false},
+    {data: "ccrp_tasks.comment",title:"Comment", visible: false},
   ];
 
   tasksTable = $('#ccrp_tasks_table').DataTable({
@@ -602,6 +612,9 @@ jQuery(document).ready(function($){
   tasksTable.on('init.dt',function(){
     console.log("full data", tasksTable.data());
     ccrp_tasks = tasksTable.data().toArray();
+
+    //filter to only show current year:
+    tasksTable.column(1).search('2018-2019').draw();
   });
 
 
@@ -634,6 +647,23 @@ jQuery(document).ready(function($){
       },
       reset_button_style_class:"ccrp_filter_reset",
       filter_default_label:"Select Person",
+      reset_button_style_class:"btn btn-primary ml-3",
+      filter_reset_button_text: "Reset" // hide yadcf reset button
+    },
+    {
+      column_number: 1,
+      filter_container_id: "year_filter",
+      filter_type:"select",
+      select_type:"select2",
+      // html_data_type:"text",
+      style_class:"ccrp_filter",
+      select_type_options:{
+        placeholder: "Select RMS Year",
+        // allowClear : true // show 'x' next to selection inseide the select itself
+        width:"80%"
+      },
+      reset_button_style_class:"ccrp_filter_reset",
+      filter_default_label:"Select Year",
       reset_button_style_class:"btn btn-primary ml-3",
       filter_reset_button_text: "Reset" // hide yadcf reset button
     }
